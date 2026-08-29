@@ -50,6 +50,7 @@
   #statusPill.victory .dot{ background: #4fd8c4; box-shadow:0 0 8px #4fd8c4; }
   #statusPill.love .dot{ background: #e8567a; box-shadow:0 0 10px #e8567a; animation: pulse 0.6s infinite ease-in-out; }
   #statusPill.fist .dot{ background: #cfcfcf; box-shadow:0 0 8px #cfcfcf; }
+  #statusPill.gallery .dot{ background: var(--gold-pale); box-shadow:0 0 8px var(--gold-pale); }
   #statusText{ color: var(--ink-dim); }
 
   /* ---------- help button ---------- */
@@ -60,14 +61,56 @@
 
   /* ---------- main display board ---------- */
   #boardWrap{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; padding: 100px 20px 40px; }
+  #mainView{ display:flex; flex-direction:column; align-items:center; transition: opacity 0.3s ease; z-index:5; }
+  #mainView.hidden{ opacity:0; pointer-events:none; position:absolute; }
   #board{ position:relative; width:min(520px, 88vw); aspect-ratio: 1/1; border-radius:22px;
     background: linear-gradient(160deg, var(--gold) 0%, var(--gold-deep) 100%);
-    padding:10px; box-shadow: 0 25px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,233,174,0.4) inset; }
+    padding:10px; box-shadow: 0 25px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,233,174,0.4) inset;
+    animation: boardFloat 5s ease-in-out infinite; }
+  @keyframes boardFloat{ 0%,100%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-9px) rotate(0.6deg);} }
+  #board.sweep::after{ content:''; position:absolute; inset:-20% -60%; z-index:6;
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.55) 50%, transparent 58%);
+    animation: sweep 0.65s ease; pointer-events:none; }
+  @keyframes sweep{ 0%{ transform:translateX(-100%); } 100%{ transform:translateX(100%); } }
   #boardInner{ position:relative; width:100%; height:100%; border-radius:16px; overflow:hidden; background:#1c1006;
     border: 3px solid var(--cream); }
-  .boardImg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 0.55s ease, transform 0.6s ease; transform: scale(1.03); }
-  .boardImg.active{ opacity:1; transform: scale(1); }
-  #boardGloss{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.35) 100%); pointer-events:none; }
+  .boardImg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; }
+  .boardImg.active{ opacity:1; }
+  .boardImg.leaving{ animation: swipeOut 0.55s ease forwards; z-index:2; }
+  .boardImg.entering{ animation: swipeIn 0.6s cubic-bezier(.22,1,.36,1) forwards; z-index:3; }
+  @keyframes swipeOut{ 0%{ opacity:1; transform:scale(1) rotate(0deg); filter:blur(0px); } 100%{ opacity:0; transform:scale(1.18) rotate(-7deg); filter:blur(9px); } }
+  @keyframes swipeIn{ 0%{ opacity:0; transform:scale(0.8) rotate(7deg) translateX(55px); filter:blur(9px); } 65%{ filter:blur(0px); } 100%{ opacity:1; transform:scale(1) rotate(0deg) translateX(0); filter:blur(0px); } }
+  #boardGloss{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.35) 100%); pointer-events:none; z-index:4; }
+
+  /* ---------- gallery (open palm = show everything) ---------- */
+  #galleryOverlay{ position:absolute; inset:0; z-index:8; display:none; flex-direction:column; align-items:center; justify-content:center; padding:90px 20px 40px; }
+  #galleryOverlay.show{ display:flex; }
+  #galleryTitle{ margin:0 0 18px 0; }
+  .galleryGrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:840px; width:100%; }
+  .galleryTile{ position:relative; border-radius:14px; overflow:hidden; aspect-ratio:1/1; background:var(--gold-deep);
+    border:3px solid var(--cream); opacity:0; transform:scale(0.35) rotate(-10deg);
+    animation: tilePop 0.55s cubic-bezier(.2,1.6,.4,1) forwards; box-shadow:0 12px 30px rgba(0,0,0,0.5); }
+  .galleryTile:nth-child(1){ animation-delay: 0.02s; } .galleryTile:nth-child(2){ animation-delay: 0.09s; }
+  .galleryTile:nth-child(3){ animation-delay: 0.16s; } .galleryTile:nth-child(4){ animation-delay: 0.23s; }
+  .galleryTile:nth-child(5){ animation-delay: 0.30s; } .galleryTile:nth-child(6){ animation-delay: 0.37s; }
+  @keyframes tilePop{ to{ opacity:1; transform:scale(1) rotate(0deg); } }
+  .galleryTile img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .galleryTile span{ position:absolute; bottom:0; left:0; right:0; background:linear-gradient(0deg, rgba(0,0,0,0.78), transparent);
+    color:var(--gold-pale); font-size:11px; padding:16px 8px 7px; text-align:center; letter-spacing:0.05em; }
+
+  /* ---------- ambient floating background ---------- */
+  #floatLayer{ position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
+  .floatEmoji{ position:absolute; bottom:-60px; opacity:0; animation: driftUp linear forwards;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); }
+  @keyframes driftUp{ 0%{ transform: translate(0,0) rotate(0deg); opacity:0; } 8%{ opacity:0.4; } 88%{ opacity:0.35; }
+    100%{ transform: translate(var(--dx), -118vh) rotate(var(--rot)); opacity:0; } }
+
+  /* ---------- gesture burst ---------- */
+  #burstLayer{ position:absolute; inset:0; z-index:16; pointer-events:none; overflow:hidden; }
+  .burstEmoji{ position:absolute; left:50%; top:46%; transform:translate(-50%,-50%); opacity:1;
+    animation: burstFly 0.95s cubic-bezier(.15,.8,.3,1) forwards; }
+  @keyframes burstFly{ 0%{ transform:translate(-50%,-50%) scale(0.3) rotate(0deg); opacity:1; }
+    100%{ transform:translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) scale(1.15) rotate(var(--brot)); opacity:0; } }
 
   #captionWrap{ margin-top: 26px; text-align:center; max-width:640px; }
   #tagline{ font-family: var(--serif); font-style:italic; font-weight:700; font-size:38px; color: var(--gold);
@@ -128,6 +171,8 @@
 <div id="stage">
   <video id="video" autoplay playsinline muted></video>
 
+  <div id="floatLayer"></div>
+
   <div id="brandHeader">
     <h1>AL-RIZWAN <span>PARATHA</span> EXPERTS</h1>
     <p>Har Paratha, Behtareen Swaad</p>
@@ -141,20 +186,29 @@
   <button id="helpBtn">❓ Gestures</button>
 
   <div id="boardWrap">
-    <div id="board">
-      <div id="boardInner">
-        <img class="boardImg active" id="imgA" src="" alt="">
-        <img class="boardImg" id="imgB" src="" alt="">
-        <div id="boardGloss"></div>
+    <div id="mainView">
+      <div id="board">
+        <div id="boardInner">
+          <img class="boardImg active" id="imgA" src="" alt="">
+          <img class="boardImg" id="imgB" src="" alt="">
+          <div id="boardGloss"></div>
+        </div>
+      </div>
+      <div id="captionWrap">
+        <p id="tagline" class="popIn">Welcome Back To Your Favourite Kitchen!</p>
+        <p id="captionSub">Al-Rizwan Paratha Experts</p>
       </div>
     </div>
-    <div id="captionWrap">
-      <p id="tagline" class="popIn">Welcome Back To Your Favourite Kitchen!</p>
-      <p id="captionSub">Al-Rizwan Paratha Experts</p>
+
+    <div id="galleryOverlay">
+      <p id="galleryTitle" class="popIn" style="font-family:var(--serif); font-style:italic; font-weight:700; font-size:26px; color:var(--gold); text-shadow:0 3px 14px rgba(0,0,0,0.7);">Poora Menu! Sab Pe Bhari 😋</p>
+      <div class="galleryGrid" id="galleryGrid"></div>
     </div>
   </div>
 
-  <div id="hintStrip">👍 <b>Yummm</b> · 👎 <b>Aloo</b> · ☝️ <b>Chicken</b> · ✌️ <b>Lassi</b> · 🤟 <b>Omelette</b> · ✊ <b>Home</b></div>
+  <div id="burstLayer"></div>
+
+  <div id="hintStrip">👍 <b>Yummm</b> · 👎 <b>Aloo</b> · ☝️ <b>Chicken</b> · ✌️ <b>Lassi</b> · 🤟 <b>Omelette</b> · ✋ <b>Menu</b> · ✊ <b>Home</b></div>
 
   <!-- ===== HELP MODAL ===== -->
   <div class="modalBackdrop" id="helpBackdrop">
@@ -167,6 +221,7 @@
         <div class="gestureRow"><span class="emoji">☝️</span><span><b>Point up</b> — Special Chicken Paratha · "Frizzy!"</span></div>
         <div class="gestureRow"><span class="emoji">✌️</span><span><b>Victory</b> — Chilled Lassi · "Cool"</span></div>
         <div class="gestureRow"><span class="emoji">🤟</span><span><b>I-love-you</b> — Cheese Omelette Paratha · "Let's Gooo!"</span></div>
+        <div class="gestureRow"><span class="emoji">✋</span><span><b>Open palm</b> — see the whole menu at once · "Poora Menu!"</span></div>
         <div class="smallNote">Your camera image is never shown or stored — only your hand shape is used, entirely in your browser.</div>
       </div>
       <button class="ghostBtn" id="saveBtn">💾 Save this screen</button>
@@ -213,36 +268,119 @@ helpBackdrop.addEventListener('click', e => { if(e.target === helpBackdrop) help
 
 // ---------- content states ----------
 const STATES = {
-  home:    { img: ASSETS.main_logo, tag: 'Welcome Back To Your Favourite Kitchen!', sub: 'Al-Rizwan Paratha Experts' },
-  Thumb_Up:   { img: ASSETS.promo,    tag: 'Yummm!',                     sub: "Today's Promo — Crispy, Buttery, Fresh" },
-  Thumb_Down: { img: ASSETS.aloo,     tag: 'Are you still not hungry?',  sub: 'Aloo Paratha — Sab Pe Bhari' },
-  Pointing_Up:{ img: ASSETS.chicken,  tag: 'Frizzy!',                    sub: 'Special Chicken Paratha — Taste That Talks' },
-  Victory:    { img: ASSETS.lassi,    tag: 'Cool.',                      sub: 'Chilled Lassi — Authentic Taste, Perfect Chill' },
-  ILoveYou:   { img: ASSETS.omelette, tag: "Let's Gooo!",                sub: 'Cheese Omelette Paratha — Not Just A Paratha' },
+  home:    { img: ASSETS.main_logo, tag: 'Welcome Back To Your Favourite Kitchen!', sub: 'Al-Rizwan Paratha Experts', burst: '🏠', label: 'Kitchen' },
+  Thumb_Up:   { img: ASSETS.promo,    tag: 'Yummm!',                     sub: "Today's Promo — Crispy, Buttery, Fresh", burst: '👍', label: 'Promo' },
+  Thumb_Down: { img: ASSETS.aloo,     tag: 'Are you still not hungry?',  sub: 'Aloo Paratha — Sab Pe Bhari', burst: '🥔', label: 'Aloo Paratha' },
+  Pointing_Up:{ img: ASSETS.chicken,  tag: 'Frizzy!',                    sub: 'Special Chicken Paratha — Taste That Talks', burst: '🍗', label: 'Chicken Paratha' },
+  Victory:    { img: ASSETS.lassi,    tag: 'Cool.',                      sub: 'Chilled Lassi — Authentic Taste, Perfect Chill', burst: '🥤', label: 'Lassi' },
+  ILoveYou:   { img: ASSETS.omelette, tag: "Let's Gooo!",                sub: 'Cheese Omelette Paratha — Not Just A Paratha', burst: '🧀', label: 'Omelette Paratha' },
 };
+const GALLERY_ORDER = ['home','Thumb_Up','Thumb_Down','Pointing_Up','Victory','ILoveYou'];
 let currentKey = 'home';
 let showingA = true;
+let galleryOpen = false;
+
+const board = document.getElementById('board');
+const mainView = document.getElementById('mainView');
+const galleryOverlay = document.getElementById('galleryOverlay');
+const galleryGrid = document.getElementById('galleryGrid');
+const floatLayer = document.getElementById('floatLayer');
+const burstLayer = document.getElementById('burstLayer');
+
+// build gallery tiles once
+GALLERY_ORDER.forEach(key => {
+  const s = STATES[key];
+  const tile = document.createElement('div');
+  tile.className = 'galleryTile';
+  tile.innerHTML = `<img src="${s.img}" alt=""><span>${s.label}</span>`;
+  galleryGrid.appendChild(tile);
+});
+
+function openGallery(){
+  if(galleryOpen) return;
+  galleryOpen = true;
+  mainView.classList.add('hidden');
+  // restart pop-in animation each time it opens
+  galleryOverlay.classList.remove('show');
+  Array.from(galleryGrid.children).forEach(t => { t.style.animation = 'none'; });
+  void galleryOverlay.offsetWidth;
+  Array.from(galleryGrid.children).forEach(t => { t.style.animation = ''; });
+  galleryOverlay.classList.add('show');
+  spawnBurst('✋', 6);
+  currentKey = 'gallery';
+}
+function closeGallery(){
+  if(!galleryOpen) return;
+  galleryOpen = false;
+  galleryOverlay.classList.remove('show');
+  mainView.classList.remove('hidden');
+}
 
 function applyState(key){
-  if(key === currentKey) return;
+  if(key === 'gallery'){ openGallery(); return; }
+  if(key === currentKey && !galleryOpen) return;
+  closeGallery();
   currentKey = key;
   const s = STATES[key];
   const showEl = showingA ? imgB : imgA;
   const hideEl = showingA ? imgA : imgB;
   showEl.src = s.img;
   showEl.onload = () => {
-    showEl.classList.add('active');
-    hideEl.classList.remove('active');
+    hideEl.classList.remove('entering');
+    hideEl.classList.add('leaving');
+    showEl.classList.remove('leaving');
+    showEl.classList.add('active','entering');
+    board.classList.remove('sweep'); void board.offsetWidth; board.classList.add('sweep');
+    setTimeout(() => { hideEl.classList.remove('leaving','active'); showEl.classList.remove('entering'); }, 650);
   };
   showingA = !showingA;
 
   tagline.classList.remove('popIn'); void tagline.offsetWidth; tagline.classList.add('popIn');
   tagline.textContent = s.tag;
   captionSub.textContent = s.sub;
+  spawnBurst(s.burst);
 }
 // initialize
 imgA.src = STATES.home.img;
 imgA.onload = () => imgA.classList.add('active');
+
+// ---------- ambient floating background (parathas, chai, spices drifting up) ----------
+const AMBIENT_EMOJIS = ['🫓','☕','🧈','🌶️','🥛','🥔','🍅','🧄','🍋','🍽️'];
+function spawnFloatEmoji(){
+  const el = document.createElement('span');
+  el.className = 'floatEmoji';
+  el.textContent = AMBIENT_EMOJIS[Math.floor(Math.random()*AMBIENT_EMOJIS.length)];
+  const size = 18 + Math.random()*30;
+  el.style.left = Math.random()*100 + '%';
+  el.style.fontSize = size + 'px';
+  const dur = 15 + Math.random()*16;
+  el.style.animationDuration = dur + 's';
+  el.style.setProperty('--dx', (Math.random()*180-90) + 'px');
+  el.style.setProperty('--rot', (Math.random()*520-260) + 'deg');
+  floatLayer.appendChild(el);
+  setTimeout(() => el.remove(), dur*1000 + 400);
+}
+for(let i=0;i<14;i++) setTimeout(spawnFloatEmoji, i*260);
+setInterval(spawnFloatEmoji, 950);
+
+// ---------- gesture-triggered emoji burst ----------
+function spawnBurst(emoji, count=9){
+  for(let i=0;i<count;i++){
+    setTimeout(() => {
+      const el = document.createElement('span');
+      el.className = 'burstEmoji';
+      el.textContent = emoji;
+      const angle = Math.random()*Math.PI*2;
+      const dist = 70 + Math.random()*170;
+      el.style.setProperty('--bx', (Math.cos(angle)*dist) + 'px');
+      el.style.setProperty('--by', (Math.sin(angle)*dist*0.7 - 70) + 'px');
+      el.style.setProperty('--brot', (Math.random()*200-100) + 'deg');
+      el.style.fontSize = (18 + Math.random()*20) + 'px';
+      burstLayer.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }, i*22);
+  }
+}
 
 // ---------- save screen ----------
 saveBtn.addEventListener('click', () => {
@@ -266,7 +404,7 @@ function showToast(msg){
 let gestureRecognizer = null, lastVideoTime = -1, running = false;
 let lastGesture = 'None', gestureHold = 0, oneShotFired = false;
 const HOLD_NEEDED = 3;
-const TRIGGERS = ['Thumb_Up','Thumb_Down','Pointing_Up','Victory','ILoveYou','Closed_Fist'];
+const TRIGGERS = ['Thumb_Up','Thumb_Down','Pointing_Up','Victory','ILoveYou','Closed_Fist','Open_Palm'];
 
 function updateStatusUI(name, score){
   statusDot.classList.remove('tracking');
@@ -277,6 +415,7 @@ function updateStatusUI(name, score){
     Victory: ['victory', `✌️ chilled lassi`],
     ILoveYou: ['love', `🤟 let's gooo!`],
     Closed_Fist: ['fist', `✊ back to kitchen`],
+    Open_Palm: ['gallery', `✋ poora menu!`],
   };
   if(map[name]){ statusPill.className = map[name][0]; statusText.textContent = map[name][1]; }
   else { statusPill.className = ''; statusDot.classList.add('tracking'); statusText.textContent = 'sensing your hand…'; }
@@ -298,6 +437,7 @@ function predictLoop(){
       if(gestureHold >= HOLD_NEEDED && !oneShotFired){
         oneShotFired = true;
         if(name === 'Closed_Fist'){ applyState('home'); }
+        else if(name === 'Open_Palm'){ applyState('gallery'); }
         else { applyState(name); }
       }
     } else { lastGesture = 'None'; gestureHold = 0; oneShotFired = false; }
