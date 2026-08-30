@@ -30,16 +30,19 @@
   @keyframes driftUp{ 0%{ transform: translate(0,0) rotate(0deg); opacity:0; } 8%{ opacity:0.4; } 88%{ opacity:0.35; }
     100%{ transform: translate(var(--dx), -118vh) rotate(var(--rot)); opacity:0; } }
 
-  #brandHeader{ position:absolute; top:0; left:0; right:0; z-index:15; text-align:center; padding-top:16px; pointer-events:none; }
-  #brandHeader h1{ font-family: var(--serif); font-weight:700; font-style:italic; font-size:26px; margin:0;
+  #layout{ position:relative; height:100%; width:100%; display:flex; flex-direction:column; z-index:5; }
+
+  #topBar{ position:relative; flex:0 0 auto; height:58px; }
+  #brandHeader{ position:absolute; top:0; left:0; right:0; text-align:center; padding-top:12px; pointer-events:none; }
+  #brandHeader h1{ font-family: var(--serif); font-weight:700; font-style:italic; font-size:22px; margin:0;
     letter-spacing:0.01em; color: var(--gold); text-shadow: 0 2px 10px rgba(0,0,0,0.7), 0 0 24px rgba(247,181,0,0.25); }
   #brandHeader h1 span{ color: var(--maroon); -webkit-text-stroke: 0.6px var(--gold-pale); }
-  #brandHeader p{ margin:3px 0 0 0; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color: var(--ink-dim); }
+  #brandHeader p{ margin:2px 0 0 0; font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; color: var(--ink-dim); }
 
-  #statusPill{ position:absolute; top:18px; left:18px; z-index:20; display:flex; align-items:center; gap:8px;
+  #statusPill{ position:absolute; top:10px; left:14px; z-index:20; display:flex; align-items:center; gap:7px;
     border:1px solid var(--line); background: rgba(36,18,5,0.6); backdrop-filter: blur(6px);
-    padding:7px 12px; border-radius:18px; font-size:10.5px; letter-spacing:0.03em; max-width:210px; }
-  #statusPill .dot{ width:7px; height:7px; border-radius:50%; background:#8d7a5c; flex-shrink:0; }
+    padding:6px 11px; border-radius:16px; font-size:10px; letter-spacing:0.03em; max-width:180px; }
+  #statusPill .dot{ width:6px; height:6px; border-radius:50%; background:#8d7a5c; flex-shrink:0; }
   #statusPill .dot.tracking{ animation: pulse 1.6s infinite ease-in-out; }
   @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
   #statusPill.up .dot{ background: #7ed957; box-shadow:0 0 8px #7ed957; }
@@ -51,58 +54,50 @@
   #statusPill.gallery .dot{ background: var(--gold-pale); box-shadow:0 0 8px var(--gold-pale); }
   #statusPill.busy .dot{ background: var(--maroon); box-shadow:0 0 8px var(--maroon); animation:none; }
 
-  #helpBtn{ position:absolute; top:18px; right:18px; z-index:20; font-family: var(--mono); font-size:10.5px;
+  #helpBtn{ position:absolute; top:10px; right:14px; z-index:20; font-family: var(--mono); font-size:10px;
     background: rgba(36,18,5,0.6); color: var(--ink); border:1px solid var(--line);
-    border-radius:16px; padding:7px 13px; cursor:pointer; letter-spacing:0.04em; backdrop-filter: blur(6px); }
+    border-radius:14px; padding:6px 12px; cursor:pointer; letter-spacing:0.04em; backdrop-filter: blur(6px); }
   #helpBtn:hover{ border-color: var(--gold); color: var(--gold); }
 
-  #boardWrap{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; padding: 84px 20px 34px; z-index:5; }
-  #board{ position:relative; width:min(480px, 86vw); aspect-ratio: 1/1; border-radius:22px;
-    background: linear-gradient(160deg, var(--gold) 0%, var(--gold-deep) 100%);
-    padding:9px; box-shadow: 0 25px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,233,174,0.4) inset;
-    animation: boardFloat 5s ease-in-out infinite; }
-  @keyframes boardFloat{ 0%,100%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-8px) rotate(0.5deg);} }
-  #board.sweep::after{ content:''; position:absolute; inset:-20% -60%; z-index:6;
+  /* ---------- full-screen media area ---------- */
+  #mediaArea{ position:relative; flex:1 1 auto; margin: 0 10px; border-radius:16px; overflow:hidden;
+    background:#150c05; border:3px solid var(--cream); box-shadow: 0 20px 55px rgba(0,0,0,0.55); }
+  #mediaArea.sweep::after{ content:''; position:absolute; inset:-20% -60%; z-index:6;
     background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.55) 50%, transparent 58%);
     animation: sweep 0.65s ease; pointer-events:none; }
   @keyframes sweep{ 0%{ transform:translateX(-100%); } 100%{ transform:translateX(100%); } }
-  #boardInner{ position:relative; width:100%; height:100%; border-radius:16px; overflow:hidden; background:#150c05;
-    border: 3px solid var(--cream); display:flex; align-items:center; justify-content:center; }
-  .boardImg{ position:absolute; inset:0; width:100%; height:100%; opacity:0; }
-  .boardImg.fit-contain{ object-fit:contain; background:#150c05; }
-  .boardImg.fit-cover{ object-fit:cover; }
-  .boardImg.active{ opacity:1; }
-  .boardImg.leaving{ animation: swipeOut 0.55s ease forwards; z-index:2; }
-  .boardImg.entering{ animation: swipeIn 0.6s cubic-bezier(.22,1,.36,1) forwards; z-index:3; }
-  @keyframes swipeOut{ 0%{ opacity:1; transform:scale(1) rotate(0deg); filter:blur(0px); } 100%{ opacity:0; transform:scale(1.18) rotate(-7deg); filter:blur(9px); } }
-  @keyframes swipeIn{ 0%{ opacity:0; transform:scale(0.8) rotate(7deg) translateX(55px); filter:blur(9px); } 65%{ filter:blur(0px); } 100%{ opacity:1; transform:scale(1) rotate(0deg) translateX(0); filter:blur(0px); } }
-  .iconSlide{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:120px; opacity:0; background: linear-gradient(160deg, #2a1808, #150c05); }
-  .iconSlide.active{ opacity:1; }
-  .iconSlide.leaving{ animation: swipeOut 0.55s ease forwards; z-index:2; }
-  .iconSlide.entering{ animation: swipeIn 0.6s cubic-bezier(.22,1,.36,1) forwards; z-index:3; }
-  #boardGloss{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.35) 100%); pointer-events:none; z-index:4; }
+  .mediaLayer{ position:absolute; inset:0; width:100%; height:100%; opacity:0; }
+  img.mediaLayer.fit-contain{ object-fit:contain; background:#150c05; }
+  img.mediaLayer.fit-cover{ object-fit:cover; }
+  .mediaLayer.active{ opacity:1; }
+  .mediaLayer.leaving{ animation: swipeOut 0.55s ease forwards; z-index:2; }
+  .mediaLayer.entering{ animation: swipeIn 0.6s cubic-bezier(.22,1,.36,1) forwards; z-index:3; }
+  @keyframes swipeOut{ 0%{ opacity:1; transform:scale(1) rotate(0deg); filter:blur(0px); } 100%{ opacity:0; transform:scale(1.16) rotate(-6deg); filter:blur(9px); } }
+  @keyframes swipeIn{ 0%{ opacity:0; transform:scale(0.85) rotate(6deg) translateX(45px); filter:blur(9px); } 65%{ filter:blur(0px); } 100%{ opacity:1; transform:scale(1) rotate(0deg) translateX(0); filter:blur(0px); } }
+  .iconSlide{ display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:10px;
+    font-size:clamp(70px,18vw,190px); background: linear-gradient(160deg, #2a1808, #150c05); padding:20px; }
+  #mediaGloss{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.32) 100%); pointer-events:none; z-index:4; }
+  #progressDots{ position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:7; display:flex; gap:6px; }
+  #progressDots .pd{ width:7px; height:7px; border-radius:50%; background: rgba(255,255,255,0.35); transition: background 0.3s ease, transform 0.3s ease; }
+  #progressDots .pd.on{ background: var(--gold); transform: scale(1.35); box-shadow:0 0 6px rgba(247,181,0,0.8); }
 
-  #progressDots{ display:flex; gap:6px; margin-top:14px; }
-  #progressDots .pd{ width:6px; height:6px; border-radius:50%; background: rgba(255,233,174,0.25); transition: background 0.3s ease, transform 0.3s ease; }
-  #progressDots .pd.on{ background: var(--gold); transform: scale(1.3); }
-
-  #captionWrap{ margin-top: 16px; text-align:center; max-width:640px; }
-  #tagline{ font-family: var(--serif); font-style:italic; font-weight:700; font-size:clamp(20px,5vw,34px); color: var(--gold);
+  #captionBar{ flex:0 0 auto; text-align:center; padding:10px 18px 4px; }
+  #tagline{ font-family: var(--serif); font-style:italic; font-weight:700; font-size:clamp(18px,4.4vw,30px); color: var(--gold);
     text-shadow: 0 3px 14px rgba(0,0,0,0.7); margin:0; }
-  #priceChip{ display:inline-block; margin-top:8px; background: linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
-    color: var(--gold-pale); font-weight:bold; font-size:15px; padding:5px 16px; border-radius:20px; border:1px solid rgba(255,233,174,0.3); }
+  #priceChip{ display:inline-block; margin-top:6px; background: linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+    color: var(--gold-pale); font-weight:bold; font-size:14px; padding:4px 15px; border-radius:18px; border:1px solid rgba(255,233,174,0.3); }
   #priceChip.hide{ display:none; }
-  #captionSub{ margin:8px 0 0 0; font-size:12.5px; letter-spacing:0.04em; color: var(--ink-dim); line-height:1.5; }
+  #captionSub{ margin:6px 0 0 0; font-size:11.5px; letter-spacing:0.03em; color: var(--ink-dim); line-height:1.4; }
 
   .popIn{ animation: popIn 0.45s cubic-bezier(.2,1.4,.4,1); }
   @keyframes popIn{ 0%{ opacity:0; transform: translateY(10px) scale(0.92); } 100%{ opacity:1; transform: translateY(0) scale(1); } }
 
-  #hintStrip{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); z-index:15;
-    display:flex; gap:7px; background: rgba(36,18,5,0.55); border:1px solid var(--line); border-radius:18px;
-    padding:7px 12px; backdrop-filter: blur(6px); font-size:10px; color: var(--ink-dim); max-width:92vw; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  #hintStrip{ flex:0 0 auto; text-align:center; padding:9px 10px 10px; font-size:10.5px; color: var(--ink-dim);
+    background: rgba(20,11,4,0.4); border-top:1px solid var(--line); transition: opacity 0.35s ease, transform 0.35s ease; }
   #hintStrip b{ color: var(--gold); font-weight:normal; }
+  #hintStrip.dim{ opacity:0.12; transform: translateY(6px); }
 
-  #toast{ position:absolute; top:70px; left:50%; transform:translateX(-50%) translateY(-8px); z-index:70;
+  #toast{ position:absolute; top:64px; left:50%; transform:translateX(-50%) translateY(-8px); z-index:70;
     background: rgba(36,18,5,0.9); border:1px solid var(--line); padding:9px 16px; border-radius:18px;
     font-size:11px; letter-spacing:0.03em; opacity:0; transition: opacity 0.4s ease, transform 0.4s ease;
     pointer-events:none; backdrop-filter: blur(6px); max-width:80vw; text-align:center; color: var(--gold-pale); }
@@ -113,6 +108,23 @@
     animation: burstFly 0.95s cubic-bezier(.15,.8,.3,1) forwards; }
   @keyframes burstFly{ 0%{ transform:translate(-50%,-50%) scale(0.3) rotate(0deg); opacity:1; }
     100%{ transform:translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) scale(1.15) rotate(var(--brot)); opacity:0; } }
+
+  /* ---------- full-screen rising gesture guide ---------- */
+  #guideOverlay{ position:absolute; inset:0; z-index:55; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(170deg, rgba(20,11,4,0.97), rgba(36,18,5,0.98));
+    opacity:0; pointer-events:none; transition: opacity 0.4s ease; padding:20px; }
+  #guideOverlay.show{ opacity:1; }
+  #guideInner{ width:min(560px, 92vw); transform: translateY(50px) scale(0.94); opacity:0; transition: transform 0.5s cubic-bezier(.2,1.3,.35,1), opacity 0.5s ease; }
+  #guideOverlay.show #guideInner{ transform: translateY(0) scale(1); opacity:1; }
+  #guideInner h2{ font-family: var(--serif); font-style:italic; font-weight:700; font-size:clamp(20px,5vw,30px); color: var(--gold);
+    text-align:center; margin:0 0 18px 0; text-shadow:0 3px 12px rgba(0,0,0,0.6); }
+  .guideGrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 18px; }
+  .guideRow{ display:flex; align-items:center; gap:12px; background: rgba(255,233,174,0.06); border:1px solid var(--line);
+    border-radius:12px; padding:10px 12px; }
+  .guideRow .gEmoji{ font-size:26px; flex-shrink:0; }
+  .guideRow .gText{ font-size:12px; line-height:1.35; color: var(--ink); }
+  .guideRow .gText b{ display:block; color: var(--gold); font-size:12.5px; margin-bottom:1px; }
+  #guideFoot{ text-align:center; margin-top:16px; font-size:10.5px; color: var(--ink-dim); letter-spacing:0.03em; }
 
   .modalBackdrop{ position:absolute; inset:0; z-index:60; background: rgba(0,0,0,0.65); display:none; align-items:center; justify-content:center; padding:20px; }
   .modalBackdrop.show{ display:flex; }
@@ -146,51 +158,67 @@
   <video id="video" autoplay playsinline muted></video>
   <div id="floatLayer"></div>
 
-  <div id="brandHeader">
-    <h1>AL-RIZWAN <span>PARATHA</span> EXPERTS</h1>
-    <p>Har Paratha, Behtareen Swaad</p>
-  </div>
-
-  <div id="statusPill">
-    <span class="dot tracking" id="statusDot"></span>
-    <span id="statusText">sensing your hand…</span>
-  </div>
-
-  <button id="helpBtn">❓ Gestures</button>
-
-  <div id="boardWrap">
-    <div id="board">
-      <div id="boardInner">
-        <img class="boardImg fit-contain active" id="imgA" src="" alt="">
-        <img class="boardImg fit-contain" id="imgB" src="" alt="">
-        <div class="iconSlide" id="iconA"></div>
-        <div class="iconSlide" id="iconB"></div>
-        <div id="boardGloss"></div>
+  <div id="layout">
+    <div id="topBar">
+      <div id="brandHeader">
+        <h1>AL-RIZWAN <span>PARATHA</span> EXPERTS</h1>
+        <p>Har Paratha, Behtareen Swaad</p>
       </div>
+      <div id="statusPill">
+        <span class="dot tracking" id="statusDot"></span>
+        <span id="statusText">sensing your hand…</span>
+      </div>
+      <button id="helpBtn">❓ Gestures</button>
     </div>
-    <div id="progressDots"></div>
-    <div id="captionWrap">
+
+    <div id="mediaArea">
+      <img class="mediaLayer fit-contain active" id="imgA" src="" alt="">
+      <img class="mediaLayer fit-contain" id="imgB" src="" alt="">
+      <div class="mediaLayer iconSlide" id="iconA"></div>
+      <div class="mediaLayer iconSlide" id="iconB"></div>
+      <div id="mediaGloss"></div>
+      <div id="progressDots"></div>
+    </div>
+
+    <div id="captionBar">
       <p id="tagline" class="popIn">Welcome Back To Your Favourite Kitchen!</p>
       <div id="priceChip" class="hide"></div>
       <p id="captionSub">Show us a hand gesture to explore our menu 👋</p>
     </div>
+
+    <div id="hintStrip">👍 Welcome · 👎 Parathas · ☝️ Drinks · ✌️ Shawarma · 🤟 Turkish · ✋ Full Menu · ✊ Categories</div>
   </div>
 
   <div id="burstLayer"></div>
 
-  <div id="hintStrip" id="hintStripText">👍 Welcome · 👎 Parathas · ☝️ Drinks · ✌️ Shawarma · 🤟 Turkish · ✋ Full Menu · ✊ Categories</div>
+  <div id="guideOverlay">
+    <div id="guideInner">
+      <h2>👋 How To Use — Show Us Your Hand!</h2>
+      <div class="guideGrid">
+        <div class="guideRow"><span class="gEmoji">👍</span><span class="gText"><b>Thumbs up</b>Welcome screen</span></div>
+        <div class="guideRow"><span class="gEmoji">👎</span><span class="gText"><b>Thumbs down</b>Paratha menu</span></div>
+        <div class="guideRow"><span class="gEmoji">☝️</span><span class="gText"><b>Point up</b>Chai &amp; drinks</span></div>
+        <div class="guideRow"><span class="gEmoji">✌️</span><span class="gText"><b>Victory</b>Shawarma menu</span></div>
+        <div class="guideRow"><span class="gEmoji">🤟</span><span class="gText"><b>I-love-you</b>Turkish specialties</span></div>
+        <div class="guideRow"><span class="gEmoji">✋</span><span class="gText"><b>Open palm</b>Full menu</span></div>
+        <div class="guideRow"><span class="gEmoji">✊</span><span class="gText"><b>Closed fist</b>All categories</span></div>
+        <div class="guideRow"><span class="gEmoji">🎥</span><span class="gText"><b>Anytime</b>Switch gestures after 1 slide</span></div>
+      </div>
+      <div id="guideFoot">Just show your hand to the camera — no tapping needed!</div>
+    </div>
+  </div>
 
   <div class="modalBackdrop" id="helpBackdrop">
     <div class="modalPanel">
       <h3>Show a gesture to the camera <button class="modalClose" id="closeHelp">✕</button></h3>
       <div class="gestureRow"><span class="emoji">👍</span><span><b>Thumbs up</b> — Welcome screen with our logo</span></div>
-      <div class="gestureRow"><span class="emoji">👎</span><span><b>Thumbs down</b> — All Paratha &amp; Cheese Paratha items</span></div>
+      <div class="gestureRow"><span class="emoji">👎</span><span><b>Thumbs down</b> — Paratha &amp; Cheese Paratha highlights</span></div>
       <div class="gestureRow"><span class="emoji">☝️</span><span><b>Point up</b> — Chai, Lassi, Shakes &amp; Juices</span></div>
-      <div class="gestureRow"><span class="emoji">✌️</span><span><b>Victory</b> — All our Turkish Shawarma varieties</span></div>
+      <div class="gestureRow"><span class="emoji">✌️</span><span><b>Victory</b> — Our Turkish Shawarma varieties</span></div>
       <div class="gestureRow"><span class="emoji">🤟</span><span><b>I-love-you</b> — Falafel, Fatayer &amp; Turkish specialties</span></div>
       <div class="gestureRow"><span class="emoji">✋</span><span><b>Open palm</b> — The full menu, slide by slide</span></div>
       <div class="gestureRow"><span class="emoji">✊</span><span><b>Closed fist</b> — All our categories at a glance</span></div>
-      <div class="smallNote">While a menu is playing, the camera pauses so nothing gets interrupted — it resumes right after. Your camera image is never shown or stored, only your hand shape is used, entirely in your browser.</div>
+      <div class="smallNote">Each gesture shows 3 slides. After the very first slide, the camera is already listening again — show a new gesture anytime to switch instantly. Your camera image is never shown or stored, only your hand shape is used, entirely in your browser.</div>
     </div>
   </div>
 
@@ -220,7 +248,7 @@ const retryBtn = document.getElementById('retryBtn');
 const statusPill = document.getElementById('statusPill');
 const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
-const board = document.getElementById('board');
+const mediaArea = document.getElementById('mediaArea');
 const imgA = document.getElementById('imgA'), imgB = document.getElementById('imgB');
 const iconA = document.getElementById('iconA'), iconB = document.getElementById('iconB');
 const tagline = document.getElementById('tagline');
@@ -233,115 +261,89 @@ const helpBackdrop = document.getElementById('helpBackdrop');
 const closeHelp = document.getElementById('closeHelp');
 const floatLayer = document.getElementById('floatLayer');
 const burstLayer = document.getElementById('burstLayer');
+const hintStrip = document.getElementById('hintStrip');
+const guideOverlay = document.getElementById('guideOverlay');
 
 helpBtn.addEventListener('click', () => helpBackdrop.classList.add('show'));
 closeHelp.addEventListener('click', () => helpBackdrop.classList.remove('show'));
 helpBackdrop.addEventListener('click', e => { if(e.target === helpBackdrop) helpBackdrop.classList.remove('show'); });
 
-/* ---------------- content sequences ---------------- */
+/* ---------------- content sequences (max 3 slides each) ---------------- */
+const SLIDE_MS = 5000;
 const SEQUENCES = {
   Thumb_Up: { burst:'👍', slides: [
     { img: ASSETS.color_logo, fit:'contain', tag:'Welcome To Your Favourite Kitchen!', sub:'Al-Rizwan Paratha Experts', duration:5500 },
   ]},
   Thumb_Down: { burst:'🫓', slides: [
     { img: ASSETS.aloo, fit:'cover', tag:'Aloo Paratha', price:'Rs. 270', sub:'Sab Pe Bhari' },
-    { img: ASSETS.chicken, fit:'cover', tag:'Chicken Anday Wala Paratha', price:'Rs. 440' },
-    { img: ASSETS.paratha_thumb2, fit:'cover', tag:'Qeema Cheese Paratha', price:'Rs. 600' },
-    { img: ASSETS.omelette, fit:'cover', tag:'Omlet Cheese Paratha', price:'Rs. 450' },
-    { img: ASSETS.paratha_thumb1, fit:'cover', tag:'Lacha Cheese Paratha', price:'Rs. 400' },
-    { img: ASSETS.kebab_thumb, fit:'cover', tag:'Chicken Chapli Kabab', price:'Rs. 200' },
-    { img: ASSETS.menu_ratelist, fit:'contain', tag:'Are you still not hungry?', sub:'See our full rate list above', big:true },
+    { img: ASSETS.chicken, fit:'cover', tag:'Chicken Cheese Paratha', price:'Rs. 600' },
+    { img: ASSETS.menu_ratelist, fit:'contain', tag:'Are you still not hungry?', sub:'See our full rate list', big:true },
   ]},
   Pointing_Up: { burst:'🥤', slides: [
     { img: ASSETS.menu_milkshakes, fit:'contain', tag:'Milk Shakes', sub:'12 delicious flavours, Glass or Mug' },
-    { img: ASSETS.drink_collage_mini, fit:'contain', tag:'Fresh Fruit Juices', sub:'Real fruit, real taste' },
     { img: ASSETS.lassi, fit:'cover', tag:'Chilled Lassi', price:'Rs. 200', sub:'Meethi Lassi — Authentic Taste' },
-    { img: ASSETS.chai_thumb, fit:'cover', tag:'Special Karak Chai', price:'Rs. 100' },
-    { img: ASSETS.menu_freshjuices, fit:'contain', tag:"Don't Just Sip — Combo It!", sub:'Pair your drink with a Sweet Paratha or Kanafa 😉', big:true },
+    { img: ASSETS.menu_freshjuices, fit:'contain', tag:"Don't Just Sip — Combo It!", sub:'Pair your drink with a Sweet Paratha or Kanafa 😉' },
   ]},
   Victory: { burst:'🌯', slides: [
     { img: ASSETS.wrap_1, fit:'cover', tag:'Sarookh Shawarma', price:'Rs. 550' },
     { img: ASSETS.turk_platershawarma, fit:'cover', tag:'Plater Shawarma', price:'Rs. 1080 / 1650 / 2120' },
-    { img: ASSETS.wrap_2, fit:'cover', tag:'Fatayer Shawarma Medium', price:'Rs. 380' },
-    { img: ASSETS.wrap_3, fit:'cover', tag:'Chicken Shawarma Roll', price:'Rs. 550' },
     { img: ASSETS.wrap_5, fit:'cover', tag:'Turkish Shawarma Wrap', price:'Rs. 550' },
-    { img: ASSETS.wrap_6, fit:'cover', tag:'Loaded Shawarma', price:'Rs. 600' },
-    { img: ASSETS.wrap_4, fit:'cover', tag:"Chef's Special Roll", price:'Rs. 650' },
   ]},
   ILoveYou: { burst:'🥙', slides: [
     { img: ASSETS.turk_falafel, fit:'cover', tag:'Sandwich Falafil', price:'Rs. 370 – 560' },
-    { img: ASSETS.turk_falafelplate, fit:'cover', tag:'Falafil Plate', price:'Rs. 1170 / 1550' },
     { img: ASSETS.turk_fatayer, fit:'cover', tag:'Turkish Falayer (Fatayer)', price:'From Rs. 650' },
-    { img: ASSETS.turk_mutabbaq, fit:'cover', tag:'Mutabbaq', price:'Rs. 470 – 550' },
     { img: ASSETS.turk_masoob, fit:'cover', tag:"King's Sweet Food — Masoob", price:'Rs. 650 – 870' },
-    { img: ASSETS.turk_humus, fit:'cover', tag:'Humus', price:'Rs. 620' },
-    { img: ASSETS.turk_fries, fit:'cover', tag:'Fries', price:'Rs. 370' },
-    { img: ASSETS.turk_kanafa, fit:'cover', tag:'Kanafa — Turkish Naan', price:'Rs. 980' },
-    { img: ASSETS.turk_dipsauces, fit:'cover', tag:'Dip Sauces', price:'Rs. 60 – 90' },
   ]},
   Open_Palm: { burst:'✋', slides: [
     { img: ASSETS.menu_combo, fit:'contain', tag:'Our Full Menu', sub:'Parathas • Shakes • Juices • Turkish Shawarma' },
-    { img: ASSETS.menu_ratelist, fit:'contain', tag:'Rate List', sub:'Fresh Rates, Fresh Taste' },
     { img: ASSETS.menu_turkish, fit:'contain', tag:'Turkish Corner', sub:'Shawarma • Falafel • Fatayer • Sweets' },
-    { img: ASSETS.menu_milkshakes, fit:'contain', tag:'Milk Shakes', sub:'12 flavours to choose from' },
-    { img: ASSETS.menu_freshjuices, fit:'contain', tag:'Fresh Juices', sub:'Pure fruit, zero compromise' },
-    { img: ASSETS.food_spread, fit:'cover', tag:'Sab Kuch Yahan Hai!', sub:'Everything you crave, one kitchen', big:true },
+    { img: ASSETS.food_spread, fit:'cover', tag:'Sab Kuch Yahan Hai!', sub:'Everything you crave, one kitchen' },
   ]},
   Closed_Fist: { burst:'🏠', slides: [
-    { icon:'🫓', tag:'Parathas & Cheese Parathas', sub:'Sada, Aloo, Chicken, Qeema & more' },
-    { icon:'🥤', tag:'Shakes & Fresh Juices', sub:'12+ flavours, Glass or Mug' },
-    { icon:'☕', tag:'Chai & Lassi', sub:'Karak, Gurr Wali, Meethi Lassi' },
-    { icon:'🌯', tag:'Turkish Shawarma', sub:'Sarookh, Plater, Fatayer Shawarma' },
-    { icon:'🥙', tag:'Falafel, Fatayer & Sweets', sub:'Humus, Fries, Kanafa & more' },
+    { icon:'🍽️', tag:'So Many Choices, So Tastier!', sub:'Parathas • Shakes • Chai • Turkish Shawarma • Falafel • Sweets' },
     { icon:'💪', tag:'Paratha Power!', sub:'Eat happy 😋 — just remember to walk it off! 🚶', funny:true },
-    { img: ASSETS.menu_combo, fit:'contain', tag:'Everything In One Place', sub:'So tastier, you cannot resist!', big:true },
+    { img: ASSETS.menu_combo, fit:'contain', tag:'Everything In One Place', sub:'So tastier, you cannot resist!' },
   ]},
 };
 
 const QR_SLIDE = { img: ASSETS.qr_code, fit:'contain', tag:'Scan For Our Digital Menu', sub:'Order fresh, order fast', duration:5000 };
-const END_SLIDE = { img: ASSETS.bw_logo, fit:'contain', tag:'Thank You For Visiting!', sub:'Al-Rizwan Paratha Experts', duration:4000 };
+const END_SLIDE = { img: ASSETS.bw_logo, fit:'contain', tag:'Thank You For Visiting!', sub:'Al-Rizwan Paratha Experts', duration:3200 };
 const IDLE_SLIDE = { img: ASSETS.color_logo, fit:'contain', tag:'Welcome Back To Your Favourite Kitchen!', sub:'Show us a hand gesture to explore our menu 👋' };
-const SMILE_SLIDE = { icon:'😄', tag:"SMILE!", sub:"Don't miss this important ingredient for your dining! 🍽️", duration:6000, funny:true };
+const SMILE_SLIDE = { icon:'😄', tag:"SMILE!", sub:"Don't miss this important ingredient for your dining! 🍽️", duration:5500, funny:true };
 const AMBIENT_TEASERS = [
-  { img: ASSETS.wrap_5, fit:'cover', tag:'🌯 Turkish Shawarma', duration:6000 },
-  { img: ASSETS.menu_milkshakes, fit:'contain', tag:'🥤 Chilled Shakes', duration:6000 },
-  { img: ASSETS.turk_falafel, fit:'cover', tag:'🥙 Falafel & Fatayer', duration:6000 },
-  { img: ASSETS.aloo, fit:'cover', tag:'🫓 Fresh Parathas', duration:6000 },
-  { icon:'💪', tag:'Eat Happy, Walk Daily!', duration:6000, funny:true },
+  { img: ASSETS.wrap_5, fit:'cover', tag:'🌯 Turkish Shawarma', duration:5500 },
+  { img: ASSETS.menu_milkshakes, fit:'contain', tag:'🥤 Chilled Shakes', duration:5500 },
+  { img: ASSETS.turk_falafel, fit:'cover', tag:'🥙 Falafel & Fatayer', duration:5500 },
+  { img: ASSETS.aloo, fit:'cover', tag:'🫓 Fresh Parathas', duration:5500 },
 ];
 
-/* ---------------- board / slide rendering ---------------- */
+/* ---------------- media rendering ---------------- */
 let showingA = true;
 function showSlide(slide){
   const usingImg = !!slide.img;
-  const showEl = usingImg ? (showingA ? imgB : imgA) : (showingA ? iconB : iconA);
-  const hideEl = showingA ? [imgA, iconA] : [imgB, iconB];
-  const otherEl = showingA ? [imgB, iconB] : [imgA, iconA];
-  // pick correct pair based on type
   const showImgEl = showingA ? imgB : imgA;
   const showIconEl = showingA ? iconB : iconA;
-  const hideImgEl = showingA ? imgA : iconA; // placeholder, replaced below
   const prevImgEl = showingA ? imgA : imgB;
   const prevIconEl = showingA ? iconA : iconB;
 
-  function finishTransition(){
-    [prevImgEl, prevIconEl].forEach(el => { el.classList.remove('entering'); el.classList.add('leaving'); });
+  function finishTransition(activeEl){
+    [prevImgEl, prevIconEl].forEach(el => { if(el !== activeEl){ el.classList.remove('entering'); el.classList.add('leaving'); } });
   }
 
   if(usingImg){
-    showImgEl.className = 'boardImg fit-' + (slide.fit || 'cover');
+    showImgEl.className = 'mediaLayer fit-' + (slide.fit || 'cover');
     showImgEl.src = slide.img;
     showImgEl.onload = () => {
       showImgEl.classList.add('active','entering');
-      finishTransition();
-      board.classList.remove('sweep'); void board.offsetWidth; board.classList.add('sweep');
+      finishTransition(showImgEl);
+      mediaArea.classList.remove('sweep'); void mediaArea.offsetWidth; mediaArea.classList.add('sweep');
       setTimeout(() => { prevImgEl.classList.remove('leaving','active'); prevIconEl.classList.remove('leaving','active'); showImgEl.classList.remove('entering'); }, 650);
     };
   } else {
-    showIconEl.textContent = slide.icon || '🍽️';
+    showIconEl.innerHTML = `<div>${slide.icon || '🍽️'}</div>`;
     showIconEl.classList.add('active','entering');
-    finishTransition();
-    board.classList.remove('sweep'); void board.offsetWidth; board.classList.add('sweep');
+    finishTransition(showIconEl);
+    mediaArea.classList.remove('sweep'); void mediaArea.offsetWidth; mediaArea.classList.add('sweep');
     setTimeout(() => { prevImgEl.classList.remove('leaving','active'); prevIconEl.classList.remove('leaving','active'); showIconEl.classList.remove('entering'); }, 650);
   }
   showingA = !showingA;
@@ -363,28 +365,30 @@ function renderDots(total, idx){
   }
 }
 
-/* generic sequence player: shows slides one after another, calls onDone when finished */
+/* generic sequence player */
 let seqToken = 0;
 function playSequence(slides, onDone){
   const myToken = ++seqToken;
   function step(i){
-    if(myToken !== seqToken) return; // interrupted
+    if(myToken !== seqToken) return;
     if(i >= slides.length){ if(onDone) onDone(); return; }
     const slide = slides[i];
     showSlide(slide);
     renderDots(slides.length, i);
-    setTimeout(() => step(i+1), slide.duration || 5000);
+    setTimeout(() => step(i+1), slide.duration || SLIDE_MS);
   }
   step(0);
   return myToken;
 }
 function interruptSequences(){ seqToken++; }
 
-/* ---------------- idle / ambient loop ---------------- */
-let locked = false;
+/* ---------------- state ---------------- */
+let menuPlaying = false;          // a gesture-triggered menu cycle is currently on screen
+let interruptAllowedAt = 0;       // camera may act on a NEW gesture again once now >= this
 let ambientRunning = false;
 let idleGen = 0;
 let idleCheckTimer = null;
+let guideTimer = null;
 const IDLE_MS = 120000;
 
 function showIdle(){
@@ -395,8 +399,24 @@ function showIdle(){
 function resetIdleTimer(){
   clearTimeout(idleCheckTimer);
   if(ambientRunning) stopAmbient();
-  idleCheckTimer = setTimeout(() => { if(!locked) startAmbient(); }, IDLE_MS);
+  idleCheckTimer = setTimeout(() => { if(!menuPlaying) startAmbient(); }, IDLE_MS);
 }
+
+function hideGuideNow(){
+  clearTimeout(guideTimer);
+  guideOverlay.classList.remove('show');
+  hintStrip.classList.remove('dim');
+}
+function showGuideOnce(duration, onDone){
+  hintStrip.classList.add('dim');
+  guideOverlay.classList.add('show');
+  guideTimer = setTimeout(() => {
+    guideOverlay.classList.remove('show');
+    hintStrip.classList.remove('dim');
+    if(onDone) onDone();
+  }, duration);
+}
+
 function shuffledTeasers(){
   const arr = AMBIENT_TEASERS.slice();
   for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
@@ -405,41 +425,50 @@ function shuffledTeasers(){
 function startAmbient(){
   ambientRunning = true;
   const myGen = ++idleGen;
-  runAmbientStep(myGen);
+  runAmbientCycle(myGen, true);
 }
 function stopAmbient(){
   if(!ambientRunning) return;
   ambientRunning = false; idleGen++;
+  hideGuideNow();
 }
-function runAmbientStep(gen){
-  if(gen !== idleGen || locked) return;
+/* ambient idle loop: rising full-screen guide -> smile prompt -> shuffled teasers -> repeat */
+function runAmbientCycle(gen, withGuide){
+  if(gen !== idleGen || menuPlaying) return;
   interruptSequences();
-  showSlide(SMILE_SLIDE);
-  renderDots(0,0);
-  setTimeout(() => {
-    if(gen !== idleGen || locked) return;
-    runTeaserSeq(gen, shuffledTeasers(), 0);
-  }, SMILE_SLIDE.duration);
+  if(withGuide){
+    showGuideOnce(6500, () => {
+      if(gen !== idleGen || menuPlaying) return;
+      showSlide(SMILE_SLIDE); renderDots(0,0);
+      setTimeout(() => { if(gen===idleGen && !menuPlaying) runTeaserSeq(gen, shuffledTeasers(), 0); }, SMILE_SLIDE.duration);
+    });
+  } else {
+    showSlide(SMILE_SLIDE); renderDots(0,0);
+    setTimeout(() => { if(gen===idleGen && !menuPlaying) runTeaserSeq(gen, shuffledTeasers(), 0); }, SMILE_SLIDE.duration);
+  }
 }
 function runTeaserSeq(gen, list, idx){
-  if(gen !== idleGen || locked) return;
-  if(idx >= list.length){ setTimeout(() => runAmbientStep(gen), 300); return; }
+  if(gen !== idleGen || menuPlaying) return;
+  if(idx >= list.length){ setTimeout(() => runAmbientCycle(gen, true), 300); return; }
   showSlide(list[idx]);
   renderDots(list.length, idx);
-  setTimeout(() => runTeaserSeq(gen, list, idx+1), list[idx].duration || 6000);
+  setTimeout(() => runTeaserSeq(gen, list, idx+1), list[idx].duration || SLIDE_MS);
 }
 
-/* ---------------- gesture cycle ---------------- */
+/* ---------------- gesture-triggered menu cycle ---------------- */
 function runGestureCycle(key){
   const def = SEQUENCES[key];
   if(!def) return;
-  locked = true;
-  interruptSequences();
+  hideGuideNow();
   stopAmbient();
+  interruptSequences();
+  menuPlaying = true;
   spawnBurst(def.burst || '🍽️');
+  const firstDur = def.slides[0].duration || SLIDE_MS;
+  interruptAllowedAt = Date.now() + firstDur; // camera can act on a new gesture again after at least one slide
   const full = def.slides.concat([QR_SLIDE, END_SLIDE]);
   playSequence(full, () => {
-    locked = false;
+    menuPlaying = false;
     showIdle();
     resetIdleTimer();
   });
@@ -451,7 +480,7 @@ function spawnFloatEmoji(){
   const el = document.createElement('span');
   el.className = 'floatEmoji';
   el.textContent = AMBIENT_EMOJIS[Math.floor(Math.random()*AMBIENT_EMOJIS.length)];
-  const size = 18 + Math.random()*30;
+  const size = 16 + Math.random()*26;
   el.style.left = Math.random()*100 + '%';
   el.style.fontSize = size + 'px';
   const dur = 15 + Math.random()*16;
@@ -461,8 +490,8 @@ function spawnFloatEmoji(){
   floatLayer.appendChild(el);
   setTimeout(() => el.remove(), dur*1000 + 400);
 }
-for(let i=0;i<14;i++) setTimeout(spawnFloatEmoji, i*260);
-setInterval(spawnFloatEmoji, 950);
+for(let i=0;i<12;i++) setTimeout(spawnFloatEmoji, i*280);
+setInterval(spawnFloatEmoji, 1050);
 
 function spawnBurst(emoji, count=9){
   for(let i=0;i<count;i++){
@@ -492,9 +521,9 @@ let lastGesture = 'None', gestureHold = 0, oneShotFired = false;
 const HOLD_NEEDED = 3;
 const TRIGGERS = ['Thumb_Up','Thumb_Down','Pointing_Up','Victory','ILoveYou','Closed_Fist','Open_Palm'];
 
-function updateStatusUI(name, score){
+function updateStatusUI(name, score, gated){
   statusDot.classList.remove('tracking');
-  if(locked){ statusPill.className = 'busy'; statusText.textContent = '🍽️ enjoy the show…'; return; }
+  if(gated){ statusPill.className = 'busy'; statusText.textContent = '🍽️ enjoy the show…'; return; }
   const map = {
     Thumb_Up: ['up', `👍 welcome!`],
     Thumb_Down: ['down', `👎 paratha menu`],
@@ -510,11 +539,7 @@ function updateStatusUI(name, score){
 
 function predictLoop(){
   if(!running) return;
-  if(locked){
-    // camera pauses reading gestures while a menu is playing
-    requestAnimationFrame(predictLoop);
-    return;
-  }
+  const gated = menuPlaying && Date.now() < interruptAllowedAt;
   if(video.readyState >= 2 && video.currentTime !== lastVideoTime){
     lastVideoTime = video.currentTime;
     const t = performance.now();
@@ -524,15 +549,15 @@ function predictLoop(){
     if(result.gestures && result.gestures.length > 0 && result.gestures[0].length > 0){
       name = result.gestures[0][0].categoryName; score = result.gestures[0][0].score;
     }
-    if(score > 0.6 && TRIGGERS.includes(name)){
+    if(!gated && score > 0.6 && TRIGGERS.includes(name)){
       if(name === lastGesture){ gestureHold++; } else { gestureHold = 1; lastGesture = name; oneShotFired = false; }
       if(gestureHold >= HOLD_NEEDED && !oneShotFired){
         oneShotFired = true;
         resetIdleTimer();
         runGestureCycle(name);
       }
-    } else { lastGesture = 'None'; gestureHold = 0; oneShotFired = false; }
-    updateStatusUI(gestureHold >= HOLD_NEEDED ? lastGesture : 'None', score);
+    } else if(!gated){ lastGesture = 'None'; gestureHold = 0; oneShotFired = false; }
+    updateStatusUI(gestureHold >= HOLD_NEEDED ? lastGesture : 'None', score, gated);
   }
   requestAnimationFrame(predictLoop);
 }
@@ -556,6 +581,8 @@ async function setup(){
     requestAnimationFrame(predictLoop);
     showToast('👋 Show a gesture to browse the menu');
     resetIdleTimer();
+    // quick intro guide shortly after boot
+    setTimeout(() => { if(!menuPlaying && !ambientRunning) showGuideOnce(6500); }, 3500);
   } catch(err){
     console.error(err);
     let msg = 'Something went wrong starting the camera or model. You can still explore by tapping "Gestures" for menu info.';
@@ -573,7 +600,7 @@ function hideOverlay(){ overlay.classList.add('hidden'); }
 retryBtn.addEventListener('click', () => { hideOverlay(); setup(); });
 
 // initialize idle screen immediately (before camera is ready)
-imgA.src = IDLE_SLIDE.img; imgA.className = 'boardImg fit-contain active';
+imgA.src = IDLE_SLIDE.img; imgA.className = 'mediaLayer fit-contain active';
 tagline.textContent = IDLE_SLIDE.tag; captionSub.textContent = IDLE_SLIDE.sub;
 
 setup();
