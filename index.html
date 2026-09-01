@@ -22,7 +22,7 @@
       linear-gradient(180deg, var(--brown-deep) 0%, #150b03 100%);
     font-family: var(--mono); color: var(--ink); }
   #stage{ position:fixed; inset:0; }
-  video#video{ position:absolute; left:-9999px; top:-9999px; width:160px; height:120px; transform: scaleX(-1); }
+  video#video, video#videoAttract{ position:absolute; left:-9999px; top:-9999px; width:160px; height:120px; transform: scaleX(-1); }
 
   #floatLayer{ position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
   .floatEmoji{ position:absolute; bottom:-60px; opacity:0; animation: driftUp linear forwards;
@@ -32,16 +32,16 @@
 
   #layout{ position:relative; height:100%; width:100%; display:flex; flex-direction:column; z-index:5; }
 
-  #topBar{ position:relative; flex:0 0 auto; height:58px; }
-  #brandHeader{ position:absolute; top:0; left:0; right:0; text-align:center; padding-top:12px; pointer-events:none; }
-  #brandHeader h1{ font-family: var(--serif); font-weight:700; font-style:italic; font-size:22px; margin:0;
+  #topBar{ position:relative; flex:0 0 auto; height:54px; }
+  #brandHeader{ position:absolute; top:0; left:0; right:0; text-align:center; padding-top:10px; pointer-events:none; }
+  #brandHeader h1{ font-family: var(--serif); font-weight:700; font-style:italic; font-size:21px; margin:0;
     letter-spacing:0.01em; color: var(--gold); text-shadow: 0 2px 10px rgba(0,0,0,0.7), 0 0 24px rgba(247,181,0,0.25); }
   #brandHeader h1 span{ color: var(--maroon); -webkit-text-stroke: 0.6px var(--gold-pale); }
-  #brandHeader p{ margin:2px 0 0 0; font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; color: var(--ink-dim); }
+  #brandHeader p{ margin:2px 0 0 0; font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color: var(--ink-dim); }
 
-  #statusPill{ position:absolute; top:10px; left:14px; z-index:20; display:flex; align-items:center; gap:7px;
+  #statusPill{ position:absolute; top:9px; left:12px; z-index:20; display:flex; align-items:center; gap:6px;
     border:1px solid var(--line); background: rgba(36,18,5,0.6); backdrop-filter: blur(6px);
-    padding:6px 11px; border-radius:16px; font-size:10px; letter-spacing:0.03em; max-width:180px; }
+    padding:5px 10px; border-radius:14px; font-size:9.5px; letter-spacing:0.03em; max-width:165px; }
   #statusPill .dot{ width:6px; height:6px; border-radius:50%; background:#8d7a5c; flex-shrink:0; }
   #statusPill .dot.tracking{ animation: pulse 1.6s infinite ease-in-out; }
   @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
@@ -52,20 +52,37 @@
   #statusPill.love .dot{ background: #e8567a; box-shadow:0 0 10px #e8567a; animation: pulse 0.6s infinite ease-in-out; }
   #statusPill.fist .dot{ background: #cfcfcf; box-shadow:0 0 8px #cfcfcf; }
   #statusPill.gallery .dot{ background: var(--gold-pale); box-shadow:0 0 8px var(--gold-pale); }
-  #statusPill.busy .dot{ background: var(--maroon); box-shadow:0 0 8px var(--maroon); animation:none; }
 
-  #helpBtn{ position:absolute; top:10px; right:14px; z-index:20; font-family: var(--mono); font-size:10px;
+  #helpBtn{ position:absolute; top:9px; right:12px; z-index:20; font-family: var(--mono); font-size:9.5px;
     background: rgba(36,18,5,0.6); color: var(--ink); border:1px solid var(--line);
-    border-radius:14px; padding:6px 12px; cursor:pointer; letter-spacing:0.04em; backdrop-filter: blur(6px); }
+    border-radius:13px; padding:5px 11px; cursor:pointer; letter-spacing:0.04em; backdrop-filter: blur(6px); }
   #helpBtn:hover{ border-color: var(--gold); color: var(--gold); }
+
+  #groupPill{ position:absolute; top:9px; left:190px; z-index:20; display:none; align-items:center; gap:6px;
+    border:1px solid var(--line); background: rgba(36,18,5,0.6); backdrop-filter: blur(6px);
+    padding:5px 10px; border-radius:14px; font-size:9.5px; letter-spacing:0.03em; color: var(--ink-dim); }
+  #groupPill.show{ display:flex; }
+  #groupPill.active{ border-color: var(--gold); color: var(--gold); }
+
+  .camRow{ margin-bottom:10px; }
+  .camRow label{ display:block; font-size:9.5px; color: var(--ink-dim); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+  .camRow select{ width:100%; background: rgba(255,233,174,0.06); border:1px solid var(--line); color: var(--ink);
+    padding:7px; border-radius:6px; font-family: var(--mono); font-size:11px; }
+  .camApplyBtn{ width:100%; margin-top:4px; font-family: var(--mono); font-size:10.5px; letter-spacing:0.06em;
+    text-transform:uppercase; background:transparent; color: var(--ink); border:1px solid var(--line);
+    padding:9px; cursor:pointer; border-radius:6px; }
+  .camApplyBtn:hover{ border-color: var(--gold); color: var(--gold); }
 
   /* ---------- full-screen media area ---------- */
   #mediaArea{ position:relative; flex:1 1 auto; margin: 0 10px; border-radius:16px; overflow:hidden;
     background:#150c05; border:3px solid var(--cream); box-shadow: 0 20px 55px rgba(0,0,0,0.55); }
-  #mediaArea.sweep::after{ content:''; position:absolute; inset:-20% -60%; z-index:6;
-    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.55) 50%, transparent 58%);
+  #mediaArea.sweep::after{ content:''; position:absolute; inset:-20% -60%; z-index:30;
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.5) 50%, transparent 58%);
     animation: sweep 0.65s ease; pointer-events:none; }
   @keyframes sweep{ 0%{ transform:translateX(-100%); } 100%{ transform:translateX(100%); } }
+
+  /* single full-bleed view (idle / thank-you / smile / teaser) */
+  #singleView{ position:absolute; inset:0; opacity:1; transition: opacity 0.3s ease; }
   .mediaLayer{ position:absolute; inset:0; width:100%; height:100%; opacity:0; }
   img.mediaLayer.fit-contain{ object-fit:contain; background:#150c05; }
   img.mediaLayer.fit-cover{ object-fit:cover; }
@@ -74,30 +91,62 @@
   .mediaLayer.entering{ animation: swipeIn 0.6s cubic-bezier(.22,1,.36,1) forwards; z-index:3; }
   @keyframes swipeOut{ 0%{ opacity:1; transform:scale(1) rotate(0deg); filter:blur(0px); } 100%{ opacity:0; transform:scale(1.16) rotate(-6deg); filter:blur(9px); } }
   @keyframes swipeIn{ 0%{ opacity:0; transform:scale(0.85) rotate(6deg) translateX(45px); filter:blur(9px); } 65%{ filter:blur(0px); } 100%{ opacity:1; transform:scale(1) rotate(0deg) translateX(0); filter:blur(0px); } }
-  .iconSlide{ display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:10px;
-    font-size:clamp(70px,18vw,190px); background: linear-gradient(160deg, #2a1808, #150c05); padding:20px; }
-  #mediaGloss{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.32) 100%); pointer-events:none; z-index:4; }
-  #progressDots{ position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:7; display:flex; gap:6px; }
-  #progressDots .pd{ width:7px; height:7px; border-radius:50%; background: rgba(255,255,255,0.35); transition: background 0.3s ease, transform 0.3s ease; }
-  #progressDots .pd.on{ background: var(--gold); transform: scale(1.35); box-shadow:0 0 6px rgba(247,181,0,0.8); }
+  .iconSlide{ display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:8px;
+    font-size:clamp(70px,18vw,190px); background: linear-gradient(160deg, #2a1808, #150c05); padding:16px; }
+
+  /* collage / photo-pile view (3 items per gesture) */
+  #collageView{ position:absolute; inset:0; opacity:0; pointer-events:none; transition: opacity 0.25s ease; }
+  #mediaArea.mode-collage #collageView{ opacity:1; }
+  #mediaArea.mode-collage #singleView{ opacity:0; }
+  .pileCard{ position:absolute; border-radius:14px; overflow:hidden; border:4px solid var(--cream);
+    box-shadow: 0 20px 44px rgba(0,0,0,0.55); background:#150c05;
+    opacity:0; transform: scale(0.65) translateY(50px) rotate(0deg);
+    transition: transform 0.65s cubic-bezier(.2,1.3,.3,1), opacity 0.5s ease; }
+  .pileCard.placed{ opacity:1; transform: scale(1) translateY(0) rotate(var(--rot)); }
+  .pileCard img{ width:100%; height:100%; display:block; }
+  .pileCard img.fit-contain{ object-fit:contain; background:#150c05; }
+  .pileCard img.fit-cover{ object-fit:cover; }
+  .pileCard .cardIcon{ width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    font-size:clamp(40px,10vw,90px); background: linear-gradient(160deg, #2a1808, #150c05); }
+  .pileCard .cardTag{ position:absolute; left:0; right:0; bottom:0; background:linear-gradient(0deg, rgba(0,0,0,0.85), transparent);
+    color: var(--gold-pale); padding:14px 10px 8px; text-align:center; }
+  .pileCard .cardTag b{ display:block; color: var(--gold); font-family: var(--serif); font-style:italic;
+    font-size:clamp(11px,2.4vw,16px); margin-bottom:2px; line-height:1.2; }
+  .pileCard .cardPrice{ display:inline-block; margin-top:3px; background: var(--maroon); color: var(--gold-pale);
+    font-size:10.5px; padding:2px 9px; border-radius:11px; }
+  /* slot 1: bottom-left, largest, drawn first */
+  .slot1{ top:8%; left:3%; width:56%; height:64%; z-index:2; --rot:-4deg; }
+  /* slot 2: top-right, mid size, lands on top of slot1's corner */
+  .slot2{ top:5%; right:3%; width:42%; height:44%; z-index:3; --rot:6deg; }
+  /* slot 3: bottom-right, lands on top of both */
+  .slot3{ bottom:6%; right:8%; width:46%; height:42%; z-index:4; --rot:-7deg; }
+
+  #mediaGloss{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.28) 100%); pointer-events:none; z-index:10; }
+
+  /* ---------- persistent scannable QR pin ---------- */
+  #qrPin{ position:absolute; left:12px; bottom:12px; z-index:20; background:#fff; padding:7px 7px 6px;
+    border-radius:12px; box-shadow: 0 12px 30px rgba(0,0,0,0.55); border:3px solid var(--gold);
+    display:flex; flex-direction:column; align-items:center; gap:4px; }
+  #qrPin img{ width:min(19vw, 140px); height:min(19vw, 140px); display:block; image-rendering:pixelated; }
+  #qrLabel{ font-size:10px; color: var(--brown-deep); font-weight:bold; letter-spacing:0.02em; text-align:center; font-family: var(--mono); }
 
   #captionBar{ flex:0 0 auto; text-align:center; padding:10px 18px 4px; }
-  #tagline{ font-family: var(--serif); font-style:italic; font-weight:700; font-size:clamp(18px,4.4vw,30px); color: var(--gold);
+  #tagline{ font-family: var(--serif); font-style:italic; font-weight:700; font-size:clamp(17px,4.2vw,28px); color: var(--gold);
     text-shadow: 0 3px 14px rgba(0,0,0,0.7); margin:0; }
   #priceChip{ display:inline-block; margin-top:6px; background: linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
     color: var(--gold-pale); font-weight:bold; font-size:14px; padding:4px 15px; border-radius:18px; border:1px solid rgba(255,233,174,0.3); }
   #priceChip.hide{ display:none; }
-  #captionSub{ margin:6px 0 0 0; font-size:11.5px; letter-spacing:0.03em; color: var(--ink-dim); line-height:1.4; }
+  #captionSub{ margin:6px 0 0 0; font-size:11px; letter-spacing:0.03em; color: var(--ink-dim); line-height:1.4; }
 
   .popIn{ animation: popIn 0.45s cubic-bezier(.2,1.4,.4,1); }
   @keyframes popIn{ 0%{ opacity:0; transform: translateY(10px) scale(0.92); } 100%{ opacity:1; transform: translateY(0) scale(1); } }
 
-  #hintStrip{ flex:0 0 auto; text-align:center; padding:9px 10px 10px; font-size:10.5px; color: var(--ink-dim);
+  #hintStrip{ flex:0 0 auto; text-align:center; padding:8px 10px 9px; font-size:10px; color: var(--ink-dim);
     background: rgba(20,11,4,0.4); border-top:1px solid var(--line); transition: opacity 0.35s ease, transform 0.35s ease; }
   #hintStrip b{ color: var(--gold); font-weight:normal; }
   #hintStrip.dim{ opacity:0.12; transform: translateY(6px); }
 
-  #toast{ position:absolute; top:64px; left:50%; transform:translateX(-50%) translateY(-8px); z-index:70;
+  #toast{ position:absolute; top:60px; left:50%; transform:translateX(-50%) translateY(-8px); z-index:70;
     background: rgba(36,18,5,0.9); border:1px solid var(--line); padding:9px 16px; border-radius:18px;
     font-size:11px; letter-spacing:0.03em; opacity:0; transition: opacity 0.4s ease, transform 0.4s ease;
     pointer-events:none; backdrop-filter: blur(6px); max-width:80vw; text-align:center; color: var(--gold-pale); }
@@ -156,6 +205,7 @@
 
 <div id="stage">
   <video id="video" autoplay playsinline muted></video>
+  <video id="videoAttract" autoplay playsinline muted></video>
   <div id="floatLayer"></div>
 
   <div id="layout">
@@ -168,16 +218,29 @@
         <span class="dot tracking" id="statusDot"></span>
         <span id="statusText">sensing your hand…</span>
       </div>
+      <div id="groupPill">
+        <span>👥</span><span id="groupText">scanning entrance…</span>
+      </div>
       <button id="helpBtn">❓ Gestures</button>
     </div>
 
-    <div id="mediaArea">
-      <img class="mediaLayer fit-contain active" id="imgA" src="" alt="">
-      <img class="mediaLayer fit-contain" id="imgB" src="" alt="">
-      <div class="mediaLayer iconSlide" id="iconA"></div>
-      <div class="mediaLayer iconSlide" id="iconB"></div>
+    <div id="mediaArea" class="mode-single">
+      <div id="singleView">
+        <img class="mediaLayer fit-contain active" id="imgA" src="" alt="">
+        <img class="mediaLayer fit-contain" id="imgB" src="" alt="">
+        <div class="mediaLayer iconSlide" id="iconA"></div>
+        <div class="mediaLayer iconSlide" id="iconB"></div>
+      </div>
+      <div id="collageView">
+        <div class="pileCard slot1" id="card1"></div>
+        <div class="pileCard slot2" id="card2"></div>
+        <div class="pileCard slot3" id="card3"></div>
+      </div>
       <div id="mediaGloss"></div>
-      <div id="progressDots"></div>
+      <div id="qrPin">
+        <img id="qrImg" src="" alt="Scan for digital menu">
+        <span id="qrLabel">📱 SCAN MENU</span>
+      </div>
     </div>
 
     <div id="captionBar">
@@ -202,7 +265,7 @@
         <div class="guideRow"><span class="gEmoji">🤟</span><span class="gText"><b>I-love-you</b>Turkish specialties</span></div>
         <div class="guideRow"><span class="gEmoji">✋</span><span class="gText"><b>Open palm</b>Full menu</span></div>
         <div class="guideRow"><span class="gEmoji">✊</span><span class="gText"><b>Closed fist</b>All categories</span></div>
-        <div class="guideRow"><span class="gEmoji">🎥</span><span class="gText"><b>Anytime</b>Switch gestures after 1 slide</span></div>
+        <div class="guideRow"><span class="gEmoji">⚡</span><span class="gText"><b>Instant</b>Switch anytime, no waiting</span></div>
       </div>
       <div id="guideFoot">Just show your hand to the camera — no tapping needed!</div>
     </div>
@@ -216,9 +279,23 @@
       <div class="gestureRow"><span class="emoji">☝️</span><span><b>Point up</b> — Chai, Lassi, Shakes &amp; Juices</span></div>
       <div class="gestureRow"><span class="emoji">✌️</span><span><b>Victory</b> — Our Turkish Shawarma varieties</span></div>
       <div class="gestureRow"><span class="emoji">🤟</span><span><b>I-love-you</b> — Falafel, Fatayer &amp; Turkish specialties</span></div>
-      <div class="gestureRow"><span class="emoji">✋</span><span><b>Open palm</b> — The full menu, slide by slide</span></div>
+      <div class="gestureRow"><span class="emoji">✋</span><span><b>Open palm</b> — The full menu, side by side</span></div>
       <div class="gestureRow"><span class="emoji">✊</span><span><b>Closed fist</b> — All our categories at a glance</span></div>
-      <div class="smallNote">Each gesture shows 3 slides. After the very first slide, the camera is already listening again — show a new gesture anytime to switch instantly. Your camera image is never shown or stored, only your hand shape is used, entirely in your browser.</div>
+      <div class="smallNote">Each gesture instantly shows 3 items together on screen, like photos landing in a pile. Show a new gesture any time to switch immediately — no waiting for anything to finish. Scan the QR code in the corner anytime for our full digital menu. Your camera image is never shown or stored, only your hand shape / headcount is used, entirely in your browser.</div>
+
+      <div class="helpSection" style="margin-top:16px; border-top:1px solid var(--line); padding-top:14px;">
+        <h4 style="font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color: var(--ink-dim); margin:0 0 10px 0; font-weight:normal;">Two-Camera Setup</h4>
+        <div class="camRow">
+          <label>Control Camera (reads gestures, close range)</label>
+          <select id="camControlSelect"></select>
+        </div>
+        <div class="camRow">
+          <label>Attract Camera (counts guests at the entrance)</label>
+          <select id="camAttractSelect"></select>
+        </div>
+        <button class="camApplyBtn" id="camApplyBtn">Apply &amp; Restart Cameras</button>
+        <div class="smallNote" id="camStatusNote">Detecting connected cameras…</div>
+      </div>
     </div>
   </div>
 
@@ -237,7 +314,7 @@ const ASSETS = {"bw_logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2
 document.getElementById('favicon').href = ASSETS.favicon;
 </script>
 <script type="module">
-import { GestureRecognizer, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+import { GestureRecognizer, FaceDetector, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 
 /* ---------------- DOM ---------------- */
 const video = document.getElementById('video');
@@ -251,10 +328,10 @@ const statusText = document.getElementById('statusText');
 const mediaArea = document.getElementById('mediaArea');
 const imgA = document.getElementById('imgA'), imgB = document.getElementById('imgB');
 const iconA = document.getElementById('iconA'), iconB = document.getElementById('iconB');
+const card1 = document.getElementById('card1'), card2 = document.getElementById('card2'), card3 = document.getElementById('card3');
 const tagline = document.getElementById('tagline');
 const priceChip = document.getElementById('priceChip');
 const captionSub = document.getElementById('captionSub');
-const progressDots = document.getElementById('progressDots');
 const toast = document.getElementById('toast');
 const helpBtn = document.getElementById('helpBtn');
 const helpBackdrop = document.getElementById('helpBackdrop');
@@ -263,53 +340,68 @@ const floatLayer = document.getElementById('floatLayer');
 const burstLayer = document.getElementById('burstLayer');
 const hintStrip = document.getElementById('hintStrip');
 const guideOverlay = document.getElementById('guideOverlay');
+const qrImg = document.getElementById('qrImg');
+const videoAttract = document.getElementById('videoAttract');
+const groupPill = document.getElementById('groupPill');
+const groupText = document.getElementById('groupText');
+const camControlSelect = document.getElementById('camControlSelect');
+const camAttractSelect = document.getElementById('camAttractSelect');
+const camApplyBtn = document.getElementById('camApplyBtn');
+const camStatusNote = document.getElementById('camStatusNote');
+
+qrImg.src = ASSETS.qr_code;
 
 helpBtn.addEventListener('click', () => helpBackdrop.classList.add('show'));
 closeHelp.addEventListener('click', () => helpBackdrop.classList.remove('show'));
 helpBackdrop.addEventListener('click', e => { if(e.target === helpBackdrop) helpBackdrop.classList.remove('show'); });
 
-/* ---------------- content sequences (max 3 slides each) ---------------- */
+/* ---------------- content: 3 items per gesture, shown together as a photo pile ---------------- */
 const SLIDE_MS = 5000;
+const COLLAGE_HOLD_MS = 12000;
+const WELCOME_HOLD_MS = 6000;
+
 const SEQUENCES = {
-  Thumb_Up: { burst:'👍', slides: [
-    { img: ASSETS.color_logo, fit:'contain', tag:'Welcome To Your Favourite Kitchen!', sub:'Al-Rizwan Paratha Experts', duration:5500 },
-  ]},
-  Thumb_Down: { burst:'🫓', slides: [
-    { img: ASSETS.aloo, fit:'cover', tag:'Aloo Paratha', price:'Rs. 270', sub:'Sab Pe Bhari' },
+  Thumb_Up: { burst:'👍', single: { img: ASSETS.color_logo, fit:'contain', tag:'Welcome To Your Favourite Kitchen!', sub:'Al-Rizwan Paratha Experts' } },
+  Thumb_Down: { burst:'🫓', title:'👎 Paratha & Cheese Paratha Favourites', sub:'Show another gesture anytime to switch instantly', slides: [
+    { img: ASSETS.aloo, fit:'cover', tag:'Aloo Paratha', price:'Rs. 270' },
     { img: ASSETS.chicken, fit:'cover', tag:'Chicken Cheese Paratha', price:'Rs. 600' },
-    { img: ASSETS.menu_ratelist, fit:'contain', tag:'Are you still not hungry?', sub:'See our full rate list', big:true },
+    { img: ASSETS.menu_ratelist, fit:'contain', tag:'Full Rate List', price:'' },
   ]},
-  Pointing_Up: { burst:'🥤', slides: [
-    { img: ASSETS.menu_milkshakes, fit:'contain', tag:'Milk Shakes', sub:'12 delicious flavours, Glass or Mug' },
-    { img: ASSETS.lassi, fit:'cover', tag:'Chilled Lassi', price:'Rs. 200', sub:'Meethi Lassi — Authentic Taste' },
-    { img: ASSETS.menu_freshjuices, fit:'contain', tag:"Don't Just Sip — Combo It!", sub:'Pair your drink with a Sweet Paratha or Kanafa 😉' },
+  Pointing_Up: { burst:'🥤', title:'☝️ Chai, Lassi & Shakes', sub:'Combo it with a sweet paratha or Kanafa 😉', slides: [
+    { img: ASSETS.menu_milkshakes, fit:'contain', tag:'Milk Shakes', price:'' },
+    { img: ASSETS.lassi, fit:'cover', tag:'Chilled Lassi', price:'Rs. 200' },
+    { img: ASSETS.menu_freshjuices, fit:'contain', tag:'Fresh Juices', price:'' },
   ]},
-  Victory: { burst:'🌯', slides: [
+  Victory: { burst:'🌯', title:'✌️ Our Turkish Shawarma', sub:'Show another gesture anytime to switch instantly', slides: [
     { img: ASSETS.wrap_1, fit:'cover', tag:'Sarookh Shawarma', price:'Rs. 550' },
-    { img: ASSETS.turk_platershawarma, fit:'cover', tag:'Plater Shawarma', price:'Rs. 1080 / 1650 / 2120' },
+    { img: ASSETS.turk_platershawarma, fit:'cover', tag:'Plater Shawarma', price:'Rs. 1080+' },
     { img: ASSETS.wrap_5, fit:'cover', tag:'Turkish Shawarma Wrap', price:'Rs. 550' },
   ]},
-  ILoveYou: { burst:'🥙', slides: [
-    { img: ASSETS.turk_falafel, fit:'cover', tag:'Sandwich Falafil', price:'Rs. 370 – 560' },
-    { img: ASSETS.turk_fatayer, fit:'cover', tag:'Turkish Falayer (Fatayer)', price:'From Rs. 650' },
-    { img: ASSETS.turk_masoob, fit:'cover', tag:"King's Sweet Food — Masoob", price:'Rs. 650 – 870' },
+  ILoveYou: { burst:'🥙', title:'🤟 Turkish Specialties', sub:'Falafel • Fatayer • Sweets', slides: [
+    { img: ASSETS.turk_falafel, fit:'cover', tag:'Sandwich Falafil', price:'Rs. 370+' },
+    { img: ASSETS.turk_fatayer, fit:'cover', tag:'Turkish Falayer', price:'Rs. 650+' },
+    { img: ASSETS.turk_masoob, fit:'cover', tag:"King's Sweet Masoob", price:'Rs. 650+' },
   ]},
-  Open_Palm: { burst:'✋', slides: [
-    { img: ASSETS.menu_combo, fit:'contain', tag:'Our Full Menu', sub:'Parathas • Shakes • Juices • Turkish Shawarma' },
-    { img: ASSETS.menu_turkish, fit:'contain', tag:'Turkish Corner', sub:'Shawarma • Falafel • Fatayer • Sweets' },
-    { img: ASSETS.food_spread, fit:'cover', tag:'Sab Kuch Yahan Hai!', sub:'Everything you crave, one kitchen' },
+  Open_Palm: { burst:'✋', title:'✋ Our Full Menu', sub:'Show another gesture anytime to switch instantly', slides: [
+    { img: ASSETS.menu_combo, fit:'contain', tag:'Full Menu', price:'' },
+    { img: ASSETS.menu_turkish, fit:'contain', tag:'Turkish Corner', price:'' },
+    { img: ASSETS.food_spread, fit:'cover', tag:'Sab Kuch Yahan Hai!', price:'' },
   ]},
-  Closed_Fist: { burst:'🏠', slides: [
-    { icon:'🍽️', tag:'So Many Choices, So Tastier!', sub:'Parathas • Shakes • Chai • Turkish Shawarma • Falafel • Sweets' },
-    { icon:'💪', tag:'Paratha Power!', sub:'Eat happy 😋 — just remember to walk it off! 🚶', funny:true },
-    { img: ASSETS.menu_combo, fit:'contain', tag:'Everything In One Place', sub:'So tastier, you cannot resist!' },
+  Closed_Fist: { burst:'🏠', title:'✊ All Our Categories', sub:'So tastier, you cannot resist!', slides: [
+    { icon:'🫓', tag:'Parathas & Cheese' },
+    { icon:'🌯', tag:'Turkish Shawarma' },
+    { icon:'🥤', tag:'Chai, Shakes & Juices' },
   ]},
 };
 
-const QR_SLIDE = { img: ASSETS.qr_code, fit:'contain', tag:'Scan For Our Digital Menu', sub:'Order fresh, order fast', duration:5000 };
-const END_SLIDE = { img: ASSETS.bw_logo, fit:'contain', tag:'Thank You For Visiting!', sub:'Al-Rizwan Paratha Experts', duration:3200 };
+const END_SLIDE = { img: ASSETS.bw_logo, fit:'contain', tag:'Thank You For Visiting!', sub:'Al-Rizwan Paratha Experts', duration:3000 };
 const IDLE_SLIDE = { img: ASSETS.color_logo, fit:'contain', tag:'Welcome Back To Your Favourite Kitchen!', sub:'Show us a hand gesture to explore our menu 👋' };
-const SMILE_SLIDE = { icon:'😄', tag:"SMILE!", sub:"Don't miss this important ingredient for your dining! 🍽️", duration:5500, funny:true };
+const FAMILY_MODE = { burst:'🎉', title:'👨‍👩‍👧‍👦 Perfect For The Whole Family!', sub:'Order together, save together!', slides: [
+  { img: ASSETS.turk_fatayer, fit:'cover', tag:'Family Fatayer', price:'Rs. 2400' },
+  { img: ASSETS.turk_platershawarma, fit:'cover', tag:'Plater Shawarma (Large)', price:'Rs. 2120' },
+  { img: ASSETS.food_spread, fit:'cover', tag:'Full Spread — Perfect For Sharing!', price:'' },
+]};
+const SMILE_SLIDE = { icon:'😄', tag:"SMILE!", sub:"Don't miss this important ingredient for your dining! 🍽️", duration:5500 };
 const AMBIENT_TEASERS = [
   { img: ASSETS.wrap_5, fit:'cover', tag:'🌯 Turkish Shawarma', duration:5500 },
   { img: ASSETS.menu_milkshakes, fit:'contain', tag:'🥤 Chilled Shakes', duration:5500 },
@@ -317,9 +409,10 @@ const AMBIENT_TEASERS = [
   { img: ASSETS.aloo, fit:'cover', tag:'🫓 Fresh Parathas', duration:5500 },
 ];
 
-/* ---------------- media rendering ---------------- */
+/* ---------------- single full-bleed slide rendering ---------------- */
 let showingA = true;
-function showSlide(slide){
+function renderSingle(slide){
+  mediaArea.classList.remove('mode-collage'); mediaArea.classList.add('mode-single');
   const usingImg = !!slide.img;
   const showImgEl = showingA ? imgB : imgA;
   const showIconEl = showingA ? iconB : iconA;
@@ -329,7 +422,6 @@ function showSlide(slide){
   function finishTransition(activeEl){
     [prevImgEl, prevIconEl].forEach(el => { if(el !== activeEl){ el.classList.remove('entering'); el.classList.add('leaving'); } });
   }
-
   if(usingImg){
     showImgEl.className = 'mediaLayer fit-' + (slide.fit || 'cover');
     showImgEl.src = slide.img;
@@ -355,123 +447,104 @@ function showSlide(slide){
   captionSub.textContent = slide.sub || '';
 }
 
-function renderDots(total, idx){
-  progressDots.innerHTML = '';
-  if(total <= 1){ return; }
-  for(let i=0;i<total;i++){
-    const d = document.createElement('span');
-    d.className = 'pd' + (i===idx ? ' on' : '');
-    progressDots.appendChild(d);
-  }
+/* ---------------- collage (photo pile) rendering — all 3 items appear together ---------------- */
+function renderCollage(def){
+  mediaArea.classList.remove('mode-single'); mediaArea.classList.add('mode-collage');
+  const cards = [card1, card2, card3];
+  cards.forEach(el => el.classList.remove('placed'));
+  void mediaArea.offsetWidth; // reflow so the entrance animation replays every time
+  def.slides.forEach((slide, i) => {
+    const el = cards[i];
+    if(!el) return;
+    if(slide.img){
+      el.innerHTML = `<img class="fit-${slide.fit||'cover'}" src="${slide.img}" alt="">
+        <div class="cardTag"><b>${slide.tag||''}</b>${slide.price ? `<span class="cardPrice">${slide.price}</span>` : ''}</div>`;
+    } else {
+      el.innerHTML = `<div class="cardIcon">${slide.icon||'🍽️'}</div>
+        <div class="cardTag"><b>${slide.tag||''}</b></div>`;
+    }
+    setTimeout(() => el.classList.add('placed'), i*280);
+  });
+  mediaArea.classList.remove('sweep');
+  setTimeout(() => { mediaArea.classList.add('sweep'); }, 850);
+
+  tagline.classList.remove('popIn'); void tagline.offsetWidth; tagline.classList.add('popIn');
+  tagline.textContent = def.title || '';
+  priceChip.classList.add('hide');
+  captionSub.textContent = def.sub || '';
 }
 
-/* generic sequence player */
-let seqToken = 0;
-function playSequence(slides, onDone){
-  const myToken = ++seqToken;
-  function step(i){
-    if(myToken !== seqToken) return;
-    if(i >= slides.length){ if(onDone) onDone(); return; }
-    const slide = slides[i];
-    showSlide(slide);
-    renderDots(slides.length, i);
-    setTimeout(() => step(i+1), slide.duration || SLIDE_MS);
-  }
-  step(0);
-  return myToken;
-}
-function interruptSequences(){ seqToken++; }
-
-/* ---------------- state ---------------- */
-let menuPlaying = false;          // a gesture-triggered menu cycle is currently on screen
-let interruptAllowedAt = 0;       // camera may act on a NEW gesture again once now >= this
-let ambientRunning = false;
-let idleGen = 0;
-let idleCheckTimer = null;
-let guideTimer = null;
-const IDLE_MS = 120000;
-
-function showIdle(){
-  interruptSequences();
-  renderDots(0,0);
-  showSlide(IDLE_SLIDE);
-}
-function resetIdleTimer(){
-  clearTimeout(idleCheckTimer);
-  if(ambientRunning) stopAmbient();
-  idleCheckTimer = setTimeout(() => { if(!menuPlaying) startAmbient(); }, IDLE_MS);
-}
-
-function hideGuideNow(){
-  clearTimeout(guideTimer);
+/* ---------------- state machine (token-based, always instantly interruptible) ---------------- */
+let token = 0;
+function bump(){
+  token++;
   guideOverlay.classList.remove('show');
   hintStrip.classList.remove('dim');
+  return token;
 }
-function showGuideOnce(duration, onDone){
+function isCurrent(t){ return t === token; }
+
+const IDLE_MS = 120000;
+let inGestureFlow = false; // true while a hand-gesture OR family-mode collage owns the screen
+
+function goIdle(){
+  const t = bump();
+  inGestureFlow = false;
+  renderSingle(IDLE_SLIDE);
+  setTimeout(() => { if(isCurrent(t)) goGuide(); }, IDLE_MS);
+}
+function goGuide(){
+  const t = bump();
   hintStrip.classList.add('dim');
   guideOverlay.classList.add('show');
-  guideTimer = setTimeout(() => {
+  setTimeout(() => {
+    if(!isCurrent(t)) return;
     guideOverlay.classList.remove('show');
     hintStrip.classList.remove('dim');
-    if(onDone) onDone();
-  }, duration);
+    goSmile();
+  }, 6500);
 }
-
+function goSmile(){
+  const t = bump();
+  renderSingle(SMILE_SLIDE);
+  setTimeout(() => { if(isCurrent(t)) goTeasers(shuffledTeasers(), 0); }, SMILE_SLIDE.duration);
+}
+function goTeasers(list, idx){
+  const t = bump();
+  if(idx >= list.length){ setTimeout(() => { if(isCurrent(t)) goGuide(); }, 300); return; }
+  renderSingle(list[idx]);
+  setTimeout(() => { if(isCurrent(t)) goTeasers(list, idx+1); }, list[idx].duration || SLIDE_MS);
+}
 function shuffledTeasers(){
   const arr = AMBIENT_TEASERS.slice();
   for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
   return arr;
 }
-function startAmbient(){
-  ambientRunning = true;
-  const myGen = ++idleGen;
-  runAmbientCycle(myGen, true);
-}
-function stopAmbient(){
-  if(!ambientRunning) return;
-  ambientRunning = false; idleGen++;
-  hideGuideNow();
-}
-/* ambient idle loop: rising full-screen guide -> smile prompt -> shuffled teasers -> repeat */
-function runAmbientCycle(gen, withGuide){
-  if(gen !== idleGen || menuPlaying) return;
-  interruptSequences();
-  if(withGuide){
-    showGuideOnce(6500, () => {
-      if(gen !== idleGen || menuPlaying) return;
-      showSlide(SMILE_SLIDE); renderDots(0,0);
-      setTimeout(() => { if(gen===idleGen && !menuPlaying) runTeaserSeq(gen, shuffledTeasers(), 0); }, SMILE_SLIDE.duration);
-    });
-  } else {
-    showSlide(SMILE_SLIDE); renderDots(0,0);
-    setTimeout(() => { if(gen===idleGen && !menuPlaying) runTeaserSeq(gen, shuffledTeasers(), 0); }, SMILE_SLIDE.duration);
-  }
-}
-function runTeaserSeq(gen, list, idx){
-  if(gen !== idleGen || menuPlaying) return;
-  if(idx >= list.length){ setTimeout(() => runAmbientCycle(gen, true), 300); return; }
-  showSlide(list[idx]);
-  renderDots(list.length, idx);
-  setTimeout(() => runTeaserSeq(gen, list, idx+1), list[idx].duration || SLIDE_MS);
-}
-
-/* ---------------- gesture-triggered menu cycle ---------------- */
-function runGestureCycle(key){
+function goGesture(key){
+  const t = bump();
   const def = SEQUENCES[key];
   if(!def) return;
-  hideGuideNow();
-  stopAmbient();
-  interruptSequences();
-  menuPlaying = true;
+  inGestureFlow = true;
   spawnBurst(def.burst || '🍽️');
-  const firstDur = def.slides[0].duration || SLIDE_MS;
-  interruptAllowedAt = Date.now() + firstDur; // camera can act on a new gesture again after at least one slide
-  const full = def.slides.concat([QR_SLIDE, END_SLIDE]);
-  playSequence(full, () => {
-    menuPlaying = false;
-    showIdle();
-    resetIdleTimer();
-  });
+  if(def.single){
+    renderSingle(def.single);
+    setTimeout(() => { if(isCurrent(t)) goEnd(); }, WELCOME_HOLD_MS);
+  } else {
+    renderCollage(def);
+    setTimeout(() => { if(isCurrent(t)) goEnd(); }, COLLAGE_HOLD_MS);
+  }
+}
+function goFamily(){
+  const t = bump();
+  inGestureFlow = true;
+  spawnBurst(FAMILY_MODE.burst);
+  renderCollage(FAMILY_MODE);
+  setTimeout(() => { if(isCurrent(t)) goEnd(); }, COLLAGE_HOLD_MS);
+}
+function goEnd(){
+  const t = bump();
+  renderSingle(END_SLIDE);
+  setTimeout(() => { if(isCurrent(t)) goIdle(); }, END_SLIDE.duration);
 }
 
 /* ---------------- ambient floating background ---------------- */
@@ -515,15 +588,13 @@ function showToast(msg){
   clearTimeout(showToast._t); showToast._t = setTimeout(()=>toast.classList.remove('show'), 2600);
 }
 
-/* ---------------- gesture recognition ---------------- */
+/* ---------------- gesture recognition — instant response ---------------- */
 let gestureRecognizer = null, lastVideoTime = -1, running = false;
-let lastGesture = 'None', gestureHold = 0, oneShotFired = false;
-const HOLD_NEEDED = 3;
+let lastGesture = 'None', oneShotFired = false;
 const TRIGGERS = ['Thumb_Up','Thumb_Down','Pointing_Up','Victory','ILoveYou','Closed_Fist','Open_Palm'];
 
-function updateStatusUI(name, score, gated){
+function updateStatusUI(name){
   statusDot.classList.remove('tracking');
-  if(gated){ statusPill.className = 'busy'; statusText.textContent = '🍽️ enjoy the show…'; return; }
   const map = {
     Thumb_Up: ['up', `👍 welcome!`],
     Thumb_Down: ['down', `👎 paratha menu`],
@@ -539,7 +610,6 @@ function updateStatusUI(name, score, gated){
 
 function predictLoop(){
   if(!running) return;
-  const gated = menuPlaying && Date.now() < interruptAllowedAt;
   if(video.readyState >= 2 && video.currentTime !== lastVideoTime){
     lastVideoTime = video.currentTime;
     const t = performance.now();
@@ -549,40 +619,158 @@ function predictLoop(){
     if(result.gestures && result.gestures.length > 0 && result.gestures[0].length > 0){
       name = result.gestures[0][0].categoryName; score = result.gestures[0][0].score;
     }
-    if(!gated && score > 0.6 && TRIGGERS.includes(name)){
-      if(name === lastGesture){ gestureHold++; } else { gestureHold = 1; lastGesture = name; oneShotFired = false; }
-      if(gestureHold >= HOLD_NEEDED && !oneShotFired){
-        oneShotFired = true;
-        resetIdleTimer();
-        runGestureCycle(name);
+    if(score > 0.6 && TRIGGERS.includes(name)){
+      if(name !== lastGesture){ lastGesture = name; oneShotFired = false; }
+      if(!oneShotFired){
+        oneShotFired = true;      // instant: fires on the very first confident frame
+        goGesture(name);
       }
-    } else if(!gated){ lastGesture = 'None'; gestureHold = 0; oneShotFired = false; }
-    updateStatusUI(gestureHold >= HOLD_NEEDED ? lastGesture : 'None', score, gated);
+    } else {
+      lastGesture = 'None'; oneShotFired = false;
+    }
+    updateStatusUI(oneShotFired ? lastGesture : 'None');
   }
   requestAnimationFrame(predictLoop);
 }
 
-/* ---------------- setup ---------------- */
-async function setup(){
-  try{
-    showOverlay('Firing up the kitchen…', 'Loading hand-gesture recognition. This runs entirely in your browser — your camera feed is never shown or stored, only your hand shape is used.', false);
+/* ---------------- attract-zone camera: headcount + family/group mode ---------------- */
+let faceDetector = null, attractRunning = false, lastAttractCheck = 0, lastAttractVideoTime = -1;
+const ATTRACT_INTERVAL_MS = 450;     // headcount doesn't need per-frame precision
+const GROUP_THRESHOLD = 3;           // 3+ faces sustained = trigger family mode
+const HOLD_CHECKS = 3;               // consecutive checks needed to trigger/reset (debounce)
+let aboveCount = 0, belowCount = 0, groupTriggered = false;
+
+function attractLoop(){
+  if(!attractRunning) return;
+  const now = performance.now();
+  if(now - lastAttractCheck >= ATTRACT_INTERVAL_MS && videoAttract.readyState >= 2 && videoAttract.currentTime !== lastAttractVideoTime){
+    lastAttractCheck = now;
+    lastAttractVideoTime = videoAttract.currentTime;
+    try{
+      const result = faceDetector.detectForVideo(videoAttract, now);
+      const count = result && result.detections ? result.detections.length : 0;
+      groupText.textContent = count === 0 ? 'watching the entrance…' : `${count} ${count===1?'guest':'guests'} nearby`;
+      groupPill.classList.toggle('active', count >= GROUP_THRESHOLD);
+
+      if(count >= GROUP_THRESHOLD){ aboveCount++; belowCount = 0; } else { belowCount++; aboveCount = 0; }
+      if(aboveCount >= HOLD_CHECKS && !groupTriggered && !inGestureFlow){
+        groupTriggered = true;
+        goFamily();
+      }
+      if(belowCount >= HOLD_CHECKS){ groupTriggered = false; }
+    } catch(e){ /* best-effort; never break the app over headcount */ }
+  }
+  requestAnimationFrame(attractLoop);
+}
+
+/* ---------------- camera device management ---------------- */
+let controlStream = null, attractStream = null;
+
+function populateCameraSelects(devices){
+  const cams = devices.filter(d => d.kind === 'videoinput');
+  [camControlSelect, camAttractSelect].forEach(sel => { sel.innerHTML = ''; });
+  cams.forEach((d, i) => {
+    const label = d.label || `Camera ${i+1}`;
+    [camControlSelect, camAttractSelect].forEach(sel => {
+      const opt = document.createElement('option');
+      opt.value = d.deviceId; opt.textContent = label;
+      sel.appendChild(opt);
+    });
+  });
+  const noneOpt = document.createElement('option');
+  noneOpt.value = ''; noneOpt.textContent = '— None —';
+  camAttractSelect.appendChild(noneOpt);
+  if(cams[0]) camControlSelect.value = cams[0].deviceId;
+  if(cams[1]) camAttractSelect.value = cams[1].deviceId; else camAttractSelect.value = '';
+  camStatusNote.textContent = cams.length >= 2
+    ? `${cams.length} cameras detected — assigned automatically, adjust above if needed.`
+    : cams.length === 1
+      ? 'Only 1 camera detected. Plug in a second USB camera for Family Mode & entrance headcount, then reopen this menu.'
+      : 'No cameras detected.';
+}
+
+async function startControlCamera(deviceId){
+  if(controlStream){ controlStream.getTracks().forEach(tr => tr.stop()); }
+  const constraints = { video: deviceId ? { deviceId: { exact: deviceId }, width:640, height:480 } : { width:640, height:480, facingMode:'user' }, audio:false };
+  controlStream = await navigator.mediaDevices.getUserMedia(constraints);
+  video.srcObject = controlStream;
+  await new Promise(res => { video.onloadedmetadata = () => { video.play(); res(); }; });
+  if(!gestureRecognizer){
     const vision = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
     gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
       baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task', delegate: 'GPU' },
       runningMode: 'VIDEO', numHands: 1
     });
+  }
+  running = true;
+  requestAnimationFrame(predictLoop);
+}
 
-    showOverlay('Requesting camera access…', 'Please allow camera permissions. The feed is processed privately in-browser and is never displayed on screen.', false);
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { width:640, height:480, facingMode:'user' }, audio:false });
-    video.srcObject = stream;
-    await new Promise(res => { video.onloadedmetadata = () => { video.play(); res(); }; });
+async function startAttractCamera(deviceId){
+  if(!deviceId){ attractRunning = false; groupPill.classList.remove('show'); return; }
+  try{
+    if(attractStream){ attractStream.getTracks().forEach(tr => tr.stop()); }
+    attractStream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId }, width:640, height:480 }, audio:false });
+    videoAttract.srcObject = attractStream;
+    await new Promise(res => { videoAttract.onloadedmetadata = () => { videoAttract.play(); res(); }; });
+    if(!faceDetector){
+      const vision = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+      faceDetector = await FaceDetector.createFromOptions(vision, {
+        baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite', delegate: 'GPU' },
+        runningMode: 'VIDEO'
+      });
+    }
+    groupPill.classList.add('show');
+    attractRunning = true;
+    aboveCount = 0; belowCount = 0; groupTriggered = false;
+    requestAnimationFrame(attractLoop);
+  } catch(e){
+    console.error('Attract camera unavailable', e);
+    attractRunning = false;
+    groupPill.classList.remove('show');
+    showToast('⚠️ Attract camera unavailable — Family Mode disabled');
+  }
+}
 
-    hideOverlay(); running = true;
-    requestAnimationFrame(predictLoop);
-    showToast('👋 Show a gesture to browse the menu');
-    resetIdleTimer();
-    // quick intro guide shortly after boot
-    setTimeout(() => { if(!menuPlaying && !ambientRunning) showGuideOnce(6500); }, 3500);
+camApplyBtn.addEventListener('click', async () => {
+  const controlId = camControlSelect.value;
+  const attractId = camAttractSelect.value;
+  camStatusNote.textContent = 'Restarting cameras…';
+  try{
+    await startControlCamera(controlId);
+    await startAttractCamera(attractId);
+    camStatusNote.textContent = 'Cameras updated!';
+    showToast('📷 Cameras updated');
+  } catch(e){
+    console.error(e);
+    camStatusNote.textContent = 'Could not start one of the cameras — check permissions.';
+  }
+});
+
+/* ---------------- setup ---------------- */
+async function setup(){
+  try{
+    showOverlay('Firing up the kitchen…', 'Loading hand-gesture recognition. This runs entirely in your browser — your camera feed is never shown or stored, only your hand shape is used.', false);
+
+    showOverlay('Requesting camera access…', 'Please allow camera permissions for both cameras if prompted. Feeds are processed privately in-browser and never displayed on screen.', false);
+    // unlock device labels with an initial permission prompt
+    const primer = await navigator.mediaDevices.getUserMedia({ video:true, audio:false });
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cams = devices.filter(d => d.kind === 'videoinput');
+    populateCameraSelects(devices);
+    primer.getTracks().forEach(tr => tr.stop());
+
+    await startControlCamera(cams[0] ? cams[0].deviceId : null);
+    if(cams.length >= 2){
+      await startAttractCamera(cams[1].deviceId);
+    } else {
+      showToast('👋 Plug in a second camera for Family Mode & entrance headcount');
+    }
+
+    hideOverlay();
+    showToast('👋 Show a gesture — it responds instantly');
+    goIdle();
+    setTimeout(() => { if(isCurrent(token)) goGuide(); }, 3500); // quick intro guide shortly after boot
   } catch(err){
     console.error(err);
     let msg = 'Something went wrong starting the camera or model. You can still explore by tapping "Gestures" for menu info.';
